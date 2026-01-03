@@ -1,11 +1,11 @@
-import { Inter } from "next/font/google";
 import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import Script from "next/script";
 
-import "./globals.css";
 import AppShell from "@/components/AppShell";
 import BackToTop from "@/components/BackToTop";
 import { AuthProvider } from "@/contexts/AuthContext";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +19,8 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "Murflix - Your Movie Streaming Hub",
-  description: "Murflix - Your Movie Streaming Hub. Watch the latest movies and TV shows online. Browse trending content, discover new releases, and enjoy unlimited entertainment.",
+  description:
+    "Murflix - Your Movie Streaming Hub. Watch the latest movies and TV shows online. Browse trending content, discover new releases, and enjoy unlimited entertainment.",
   keywords: ["movies", "tv shows", "streaming", "entertainment", "murflix"],
   authors: [{ name: "Murflix" }],
   manifest: "/manifest.webmanifest",
@@ -30,7 +31,8 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Murflix - Watch Movies & TV Shows Online",
-    description: "Your destination for streaming the latest movies and TV shows.",
+    description:
+      "Your destination for streaming the latest movies and TV shows.",
     type: "website",
   },
 };
