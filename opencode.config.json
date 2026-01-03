@@ -1,0 +1,11 @@
+{
+  "mcp": [
+    {
+      "type": "supabase",
+      "url": "https://<YOUR_PROJECT>.supabase.co",
+      "apiKey": "<YOUR_API_KEY>",
+      "database": "postgres",
+      "schema": "public"
+    }
+  ]
+}
