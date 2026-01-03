@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
         hostname: 'www.themoviedb.org',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'assets.nflxext.com',
+        pathname: '/**',
+      },
     ],
   },
 };

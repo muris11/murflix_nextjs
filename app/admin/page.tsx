@@ -110,23 +110,23 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="space-y-8 text-white">
+    <div className="space-y-6 md:space-y-8 text-white">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white">Dashboard</h1>
-        <p className="mt-1 text-gray-400">
+        <h1 className="text-2xl md:text-3xl font-bold text-white">Dashboard</h1>
+        <p className="mt-1 text-sm md:text-base text-gray-400">
           Selamat datang di Admin Panel Murflix
         </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {/* Total Users */}
-        <div className="rounded-xl bg-gray-800 p-6 shadow-lg border border-gray-700">
+        <div className="rounded-xl bg-gray-800 p-4 md:p-6 shadow-lg border border-gray-700">
           <div className="flex items-center justify-between">
-            <div className="rounded-lg bg-blue-900/30 p-3 text-blue-400">
+            <div className="rounded-lg bg-blue-900/30 p-2 md:p-3 text-blue-400">
               <svg
-                className="h-6 w-6"
+                className="h-5 w-5 md:h-6 md:w-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -140,16 +140,18 @@ export default function AdminDashboard() {
               </svg>
             </div>
           </div>
-          <p className="mt-4 text-3xl font-bold text-white">{stats.totalUsers}</p>
-          <p className="text-sm text-gray-400">Total Users</p>
+          <p className="mt-3 md:mt-4 text-2xl md:text-3xl font-bold text-white">
+            {stats.totalUsers}
+          </p>
+          <p className="text-xs md:text-sm text-gray-400">Total Users</p>
         </div>
 
         {/* Active Users */}
-        <div className="rounded-xl bg-gray-800 p-6 shadow-lg border border-gray-700">
+        <div className="rounded-xl bg-gray-800 p-4 md:p-6 shadow-lg border border-gray-700">
           <div className="flex items-center justify-between">
-            <div className="rounded-lg bg-green-900/30 p-3 text-green-400">
+            <div className="rounded-lg bg-green-900/30 p-2 md:p-3 text-green-400">
               <svg
-                className="h-6 w-6"
+                className="h-5 w-5 md:h-6 md:w-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -163,16 +165,20 @@ export default function AdminDashboard() {
               </svg>
             </div>
           </div>
-          <p className="mt-4 text-3xl font-bold text-white">{stats.activeUsers}</p>
-          <p className="text-sm text-gray-400">Active Subscriptions</p>
+          <p className="mt-3 md:mt-4 text-2xl md:text-3xl font-bold text-white">
+            {stats.activeUsers}
+          </p>
+          <p className="text-xs md:text-sm text-gray-400">
+            Active Subscriptions
+          </p>
         </div>
 
         {/* Expired Users */}
-        <div className="rounded-xl bg-gray-800 p-6 shadow-lg border border-gray-700">
+        <div className="rounded-xl bg-gray-800 p-4 md:p-6 shadow-lg border border-gray-700">
           <div className="flex items-center justify-between">
-            <div className="rounded-lg bg-red-900/30 p-3 text-red-400">
+            <div className="rounded-lg bg-red-900/30 p-2 md:p-3 text-red-400">
               <svg
-                className="h-6 w-6"
+                className="h-5 w-5 md:h-6 md:w-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -186,16 +192,20 @@ export default function AdminDashboard() {
               </svg>
             </div>
           </div>
-          <p className="mt-4 text-3xl font-bold text-white">{stats.expiredUsers}</p>
-          <p className="text-sm text-gray-400">Expired Subscriptions</p>
+          <p className="mt-3 md:mt-4 text-2xl md:text-3xl font-bold text-white">
+            {stats.expiredUsers}
+          </p>
+          <p className="text-xs md:text-sm text-gray-400">
+            Expired Subscriptions
+          </p>
         </div>
 
         {/* Admins */}
-        <div className="rounded-xl bg-gray-800 p-6 shadow-lg border border-gray-700">
+        <div className="rounded-xl bg-gray-800 p-4 md:p-6 shadow-lg border border-gray-700">
           <div className="flex items-center justify-between">
-            <div className="rounded-lg bg-purple-900/30 p-3 text-purple-400">
+            <div className="rounded-lg bg-purple-900/30 p-2 md:p-3 text-purple-400">
               <svg
-                className="h-6 w-6"
+                className="h-5 w-5 md:h-6 md:w-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -209,25 +219,29 @@ export default function AdminDashboard() {
               </svg>
             </div>
           </div>
-          <p className="mt-4 text-3xl font-bold text-white">{stats.admins}</p>
-          <p className="text-sm text-gray-400">Administrators</p>
+          <p className="mt-3 md:mt-4 text-2xl md:text-3xl font-bold text-white">
+            {stats.admins}
+          </p>
+          <p className="text-xs md:text-sm text-gray-400">Administrators</p>
         </div>
       </div>
 
       {/* Quick Actions & Recent Users */}
-      <div className="grid gap-8 lg:grid-cols-3">
+      <div className="grid gap-6 md:gap-8 lg:grid-cols-3">
         {/* Quick Actions */}
-        <div className="lg:col-span-1 space-y-6">
-          <h2 className="text-xl font-bold text-white">Quick Actions</h2>
-          <div className="space-y-4">
+        <div className="lg:col-span-1 space-y-4 md:space-y-6">
+          <h2 className="text-lg md:text-xl font-bold text-white">
+            Quick Actions
+          </h2>
+          <div className="space-y-3 md:space-y-4">
             <Link
               href="/admin/users/create"
-              className="flex items-center justify-between rounded-lg bg-gray-800 p-4 shadow hover:bg-gray-700 transition-colors border border-gray-700 group"
+              className="flex items-center justify-between rounded-lg bg-gray-800 p-3 md:p-4 shadow hover:bg-gray-700 transition-colors border border-gray-700 group"
             >
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-3 md:space-x-4">
                 <div className="rounded-full bg-blue-500/20 p-2 text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-colors">
                   <svg
-                    className="h-5 w-5"
+                    className="h-4 w-4 md:h-5 md:w-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -240,20 +254,32 @@ export default function AdminDashboard() {
                     />
                   </svg>
                 </div>
-                <span className="font-medium text-white">Tambah User Baru</span>
+                <span className="text-sm md:text-base font-medium text-white">
+                  Tambah User Baru
+                </span>
               </div>
-              <svg className="h-5 w-5 text-gray-500 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <svg
+                className="h-4 w-4 md:h-5 md:w-5 text-gray-500 group-hover:text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
               </svg>
             </Link>
             <Link
               href="/admin/users"
-              className="flex items-center justify-between rounded-lg bg-gray-800 p-4 shadow hover:bg-gray-700 transition-colors border border-gray-700 group"
+              className="flex items-center justify-between rounded-lg bg-gray-800 p-3 md:p-4 shadow hover:bg-gray-700 transition-colors border border-gray-700 group"
             >
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-3 md:space-x-4">
                 <div className="rounded-full bg-green-500/20 p-2 text-green-400 group-hover:bg-green-500 group-hover:text-white transition-colors">
                   <svg
-                    className="h-5 w-5"
+                    className="h-4 w-4 md:h-5 md:w-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -266,12 +292,22 @@ export default function AdminDashboard() {
                     />
                   </svg>
                 </div>
-                <span className="font-medium text-white">
+                <span className="text-sm md:text-base font-medium text-white">
                   Lihat Semua User
                 </span>
               </div>
-              <svg className="h-5 w-5 text-gray-500 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <svg
+                className="h-4 w-4 md:h-5 md:w-5 text-gray-500 group-hover:text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
               </svg>
             </Link>
           </div>
@@ -280,18 +316,22 @@ export default function AdminDashboard() {
         {/* Recent Users */}
         <div className="lg:col-span-2">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-white">User Terbaru</h2>
+            <h2 className="text-lg md:text-xl font-bold text-white">
+              User Terbaru
+            </h2>
             <Link
               href="/admin/users"
-              className="text-sm font-medium text-primary hover:text-red-400"
+              className="text-xs md:text-sm font-medium text-primary hover:text-red-400 transition-colors"
             >
               Lihat Semua
             </Link>
           </div>
 
           {recentUsers.length === 0 ? (
-            <div className="rounded-lg bg-gray-800 p-8 text-center text-gray-400 border border-gray-700">
-              <p>Belum ada user yang terdaftar.</p>
+            <div className="rounded-lg bg-gray-800 p-6 md:p-8 text-center text-gray-400 border border-gray-700">
+              <p className="text-sm md:text-base">
+                Belum ada user yang terdaftar.
+              </p>
             </div>
           ) : (
             <div className="overflow-hidden rounded-lg border border-gray-700 bg-gray-800 shadow">
@@ -299,25 +339,25 @@ export default function AdminDashboard() {
                 {recentUsers.map((user) => (
                   <div
                     key={user.id}
-                    className="flex items-center justify-between p-4 hover:bg-gray-700/50 transition-colors"
+                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 md:p-4 hover:bg-gray-700/50 transition-colors gap-3 sm:gap-4"
                   >
-                    <div className="flex items-center space-x-4">
-                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gray-700 text-lg font-bold text-white">
+                    <div className="flex items-center space-x-3 md:space-x-4 min-w-0 flex-1">
+                      <div className="flex h-8 w-8 md:h-10 md:w-10 flex-shrink-0 items-center justify-center rounded-full bg-gray-700 text-sm md:text-lg font-bold text-white">
                         {user.full_name?.[0]?.toUpperCase() ||
                           user.email[0].toUpperCase()}
                       </div>
-                      <div>
-                        <p className="text-sm font-medium text-white">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs md:text-sm font-medium text-white truncate">
                           {user.full_name || "User"}
                         </p>
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-gray-400 truncate">
                           {user.email}
                         </p>
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="flex items-center justify-between sm:justify-end gap-3 sm:text-right">
                       {getSubscriptionBadge(user)}
-                      <p className="mt-1 text-xs text-gray-500">
+                      <p className="text-xs text-gray-500 whitespace-nowrap">
                         {formatDate(user.created_at)}
                       </p>
                     </div>

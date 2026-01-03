@@ -3,7 +3,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface NavItem {
   name: string;
@@ -60,6 +60,7 @@ export default function AdminLayout({
   const { profile, isLoading, isAdmin, signOut } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Redirect if not admin
   useEffect(() => {
@@ -87,17 +88,55 @@ export default function AdminLayout({
 
   return (
     <div className="flex min-h-screen bg-gray-900">
+      {/* Mobile menu button */}
+      <button
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        className="fixed top-4 left-4 z-50 rounded-lg bg-gray-800 p-2 text-white shadow-lg lg:hidden hover:bg-gray-700 transition-colors"
+        aria-label="Toggle menu"
+      >
+        <svg
+          className="h-6 w-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          {isMobileMenuOpen ? (
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          ) : (
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          )}
+        </svg>
+      </button>
+
+      {/* Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-50 w-64 transform bg-gray-800 transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0">
+      <aside
+        className={`fixed inset-y-0 left-0 z-40 w-64 transform bg-gray-800 transition-transform duration-300 ease-in-out ${
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 lg:static lg:inset-0`}
+      >
         {/* Logo */}
         <div className="flex h-16 items-center justify-center border-b border-gray-700">
           <Link href="/admin" className="flex items-center space-x-2">
-            <span className="text-2xl font-bold text-primary">
-              MURFLIX
-            </span>
-            <span className="text-sm font-semibold text-white">
-              ADMIN
-            </span>
+            <span className="text-2xl font-bold text-primary">MURFLIX</span>
+            <span className="text-sm font-semibold text-white">ADMIN</span>
           </Link>
         </div>
 
@@ -111,6 +150,7 @@ export default function AdminLayout({
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
                 className={`group flex items-center rounded-md px-2 py-2 text-sm font-medium transition-colors ${
                   isActive
                     ? "bg-gray-900 text-white"
@@ -137,7 +177,9 @@ export default function AdminLayout({
               <p className="text-sm font-medium text-white">
                 {profile?.full_name || "Admin"}
               </p>
-              <p className="text-xs text-gray-400 truncate max-w-[150px]">{profile?.email}</p>
+              <p className="text-xs text-gray-400 truncate max-w-[150px]">
+                {profile?.email}
+              </p>
             </div>
           </div>
 
@@ -186,8 +228,8 @@ export default function AdminLayout({
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-900 p-8">
-        <div className="container mx-auto">{children}</div>
+      <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-900 p-4 pt-20 md:p-6 lg:p-8 lg:pt-8">
+        <div className="container mx-auto max-w-7xl">{children}</div>
       </main>
     </div>
   );
