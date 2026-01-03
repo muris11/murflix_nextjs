@@ -1,52 +1,50 @@
+import PageHeader from "@/components/PageHeader";
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-[#141414] pt-24 pb-20 px-4 sm:px-6 lg:px-8 text-white">
-      <div className="max-w-3xl mx-auto space-y-12">
-        {/* Header */}
-        <div className="text-center space-y-4 border-b border-gray-800 pb-8">
-          <h1 className="text-4xl font-bold tracking-tight">Terms of Service</h1>
-          <p className="text-xl text-gray-400">The rules and conditions for using Murflix.</p>
-        </div>
-        
-        {/* Content */}
-        <div className="prose prose-invert prose-lg max-w-none space-y-12 text-gray-300">
-          <p className="text-sm text-gray-500 uppercase tracking-widest font-semibold">Last Updated: January 2026</p>
+    <div className="min-h-screen bg-[#141414] text-white">
+      <PageHeader 
+        title="Terms of Service" 
+        subtitle="Last Updated: January 2026"
+      />
 
-          <section className="space-y-4">
-            <h2 className="text-2xl font-bold text-white">1. Introduction</h2>
-            <p>
-              Welcome to Murflix. By accessing our website and using our services, you agree to be bound by these Terms of Service. Please read them carefully.
-            </p>
-          </section>
+      <div className="max-w-4xl mx-auto px-6 pb-24">
+        <div className="prose prose-invert prose-lg max-w-none">
+          <div className="p-8 md:p-12 bg-neutral-900/30 rounded-3xl border border-white/5 space-y-12">
+            
+            <section>
+              <h3 className="text-2xl font-bold text-white mb-4">1. Acceptance of Terms</h3>
+              <p className="text-gray-400 leading-relaxed">
+                By accessing and using Murflix, including accessing the website, mobile applications, and other services provided by Murflix, you agree to these Terms of Use and our Privacy Policy. If you do not agree to these Terms, you may not use our Service.
+              </p>
+            </section>
 
-          <section className="space-y-4">
-            <h2 className="text-2xl font-bold text-white">2. Use of Service</h2>
-            <p>
-              Murflix provides a personalized subscription service that allows our members to access entertainment content (&quot;Murflix content&quot;) over the Internet on certain Internet-connected TV&apos;s, computers and other devices.
-            </p>
-          </section>
+            <section>
+              <h3 className="text-2xl font-bold text-white mb-4">2. Subscription & Billing</h3>
+              <p className="text-gray-400 leading-relaxed mb-4">
+                Your Murflix subscription will continue until terminated. To use the Murflix service you must have Internet access and a Murflix ready device, and provide us with one or more Payment Methods.
+              </p>
+              <ul className="list-disc pl-6 space-y-2 text-gray-400">
+                <li>We may change our subscription plans and the price of our service from time to time.</li>
+                <li>You can cancel your Murflix membership at any time, and you will continue to have access to the Murflix service through the end of your billing period.</li>
+              </ul>
+            </section>
 
-          <section className="space-y-4">
-            <h2 className="text-2xl font-bold text-white">3. User Content</h2>
-            <p>
-              You are responsible for any content you post or share on Murflix. We reserve the right to remove any content that violates our policies or is deemed inappropriate.
-            </p>
-          </section>
+            <section>
+              <h3 className="text-2xl font-bold text-white mb-4">3. Content Limitations</h3>
+              <p className="text-gray-400 leading-relaxed">
+                The Murflix service and any content viewed through the service are for your personal and non-commercial use only. During your Murflix membership we grant you a limited, non-exclusive, non-transferable right to access the Murflix service and view Murflix content.
+              </p>
+            </section>
 
-          <section className="space-y-4">
-            <h2 className="text-2xl font-bold text-white">4. Intellectual Property</h2>
-            <p>
-              The Murflix service and any content viewed through the service are for your personal and non-commercial use only. We grant you a limited, non-exclusive, non-transferable license to access the Murflix service and view Murflix content.
-            </p>
-          </section>
+             <section>
+              <h3 className="text-2xl font-bold text-white mb-4">4. Governing Law</h3>
+              <p className="text-gray-400 leading-relaxed">
+                These Terms of Use shall be governed by and construed in accordance with the laws of the jurisdiction in which Murflix is headquartered, without regard to its conflict of law provisions.
+              </p>
+            </section>
 
-          <section className="space-y-4">
-            <h2 className="text-2xl font-bold text-white">5. Termination</h2>
-            <p>
-              We may terminate or suspend access to our service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.
-            </p>
-          </section>
+          </div>
         </div>
       </div>
     </div>

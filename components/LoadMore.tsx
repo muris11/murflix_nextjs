@@ -66,12 +66,12 @@ export default function LoadMore({
 
   return (
     <>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mt-4">
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-2 mt-2">
         {items.map((item, index) => (
           <MovieCard key={`${item.id}-${index}`} item={item} fullWidth />
         ))}
         {isLoading &&
-          Array.from({ length: 6 }).map((_, i) => (
+          Array.from({ length: 7 }).map((_, i) => (
             <MovieCardSkeleton key={`skeleton-${i}`} />
           ))}
       </div>

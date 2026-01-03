@@ -10,11 +10,14 @@ interface MovieControlsProps {
   id: number;
   mediaType?: 'movie' | 'tv';
   trailerKey?: string;
+  season?: number;
+  episode?: number;
+  title?: string; // Add title prop
 }
 
-export default function MovieControls({ id, mediaType = 'movie', trailerKey }: MovieControlsProps) {
+export default function MovieControls({ id, mediaType = 'movie', trailerKey, season, episode, title }: MovieControlsProps) {
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
-  const [videoUrl, setVideoUrl] = useState("");
+  const [playTrailer, setPlayTrailer] = useState(false);
   
   // Watchlist State
   const [isInWatchlist, setIsInWatchlist] = useState(false);
@@ -60,16 +63,13 @@ export default function MovieControls({ id, mediaType = 'movie', trailerKey }: M
   }, [checkStatus, tmdbSessionId]);
 
   const handlePlay = () => {
-    const baseUrl = mediaType === 'movie' 
-      ? `https://vidsrc.xyz/embed/movie/${id}`
-      : `https://vidsrc.xyz/embed/tv/${id}`;
-    setVideoUrl(baseUrl);
+    setPlayTrailer(false);
     setIsPlayerOpen(true);
   };
 
   const handleWatchTrailer = () => {
     if (trailerKey) {
-      setVideoUrl(`https://www.youtube.com/embed/${trailerKey}?autoplay=1`);
+      setPlayTrailer(true);
       setIsPlayerOpen(true);
     }
   };
@@ -103,12 +103,12 @@ export default function MovieControls({ id, mediaType = 'movie', trailerKey }: M
       <div className="flex items-center space-x-4 pt-4">
         <button
           onClick={handlePlay}
-          className="flex items-center bg-white text-black px-8 py-3 rounded font-bold hover:bg-white/90 transition-colors transform hover:scale-105 duration-200"
+          className="flex items-center bg-white text-black px-6 py-2 rounded font-bold hover:bg-white/90 transition-colors transform hover:scale-105 duration-200"
         >
-          <svg className="w-7 h-7 mr-2" viewBox="0 0 24 24" fill="currentColor">
+          <svg className="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="currentColor">
             <path d="M8 5v14l11-7z" />
           </svg>
-          <span className="text-lg">Play</span>
+          <span className="text-base">Play</span>
         </button>
 
         {trailerKey && (
@@ -150,7 +150,13 @@ export default function MovieControls({ id, mediaType = 'movie', trailerKey }: M
       <VideoPlayerModal
         isOpen={isPlayerOpen}
         onClose={() => setIsPlayerOpen(false)}
-        videoUrl={videoUrl}
+        videoUrl={playTrailer && trailerKey ? `https://www.youtube.com/embed/${trailerKey}?autoplay=1` : undefined}
+        tmdbId={id}
+        mediaType={mediaType}
+        season={season}
+        episode={episode}
+        title={playTrailer ? (title ? `${title} - Trailer` : "Trailer") : title}
+        subTitle={playTrailer ? undefined : (mediaType === 'movie' ? 'Movie' : undefined)}
       />
     </>
   );

@@ -95,7 +95,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
         {/* Results Grid */}
         {results.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-8">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-2">
             {results.map((item) => (
               <MovieCard key={item.id} item={item} fullWidth />
             ))}

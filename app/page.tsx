@@ -45,7 +45,7 @@ export default async function HomePage() {
       <Hero items={trendingData.results} />
 
       {/* Content Container - pulled up over Hero */}
-      <div className="relative z-20 -mt-32 space-y-8 md:space-y-12 lg:space-y-16 pl-4 md:pl-8 lg:pl-12 overflow-x-hidden">
+      <div className="relative z-20 -mt-10 md:-mt-16 lg:-mt-20 space-y-2 md:space-y-4 lg:space-y-6 pl-4 md:pl-8 lg:pl-12 overflow-x-hidden">
         
         {/* Main Trending Row (Priority) */}
         <MovieRow

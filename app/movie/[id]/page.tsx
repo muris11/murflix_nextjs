@@ -1,5 +1,6 @@
 import MovieControls from "@/components/MovieControls";
-import MovieRow from "@/components/MovieRow";
+import MovieCard from "@/components/MovieCard";
+import CastSlider from "@/components/CastSlider"; 
 import { fetchMovieDetails, getBackdropUrl, getImageUrl } from "@/lib/tmdb";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -59,18 +60,24 @@ export default async function MoviePage({ params }: MoviePageProps) {
     movie.credits?.crew
       .filter((c) => c.job === "Writer" || c.job === "Screenplay")
       .slice(0, 3) || [];
-  const cast = movie.credits?.cast.slice(0, 12) || [];
+  const cast = movie.credits?.cast.slice(0, 20) || [];
   
-  // Find trailer (fallback to Teaser or any YouTube video)
   const videos = movie.videos?.results || [];
   const trailer = videos.find((v) => v.type === "Trailer" && v.site === "YouTube") ||
                  videos.find((v) => v.type === "Teaser" && v.site === "YouTube") ||
                  videos.find((v) => v.site === "YouTube");
 
-  const similarMovies = movie.similar?.results.slice(0, 20) || [];
-  const recommendations = movie.recommendations?.results.slice(0, 20) || [];
-
-  // Get US certification
+  const similarMovies = movie.similar?.results || [];
+  const recommendations = movie.recommendations?.results || [];
+  
+  // Combine recommendations and similar movies, remove duplicates
+  const allRelatedMovies = [...recommendations, ...similarMovies]
+    .filter((item, index, self) => 
+      index === self.findIndex((t) => t.id === item.id)
+    )
+    .filter((item) => item.id !== movieId) // Remove current movie
+    .slice(0, 24); // Limit to 24 items
+  
   const usRelease = movie.release_dates?.results.find(
     (r) => r.iso_3166_1 === "US"
   );
@@ -85,228 +92,156 @@ export default async function MoviePage({ params }: MoviePageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#141414] text-white">
-      {/* Hero Section */}
-      <div className="relative h-[85vh] w-full">
-        {/* Backdrop Image */}
-        <Image
-          src={getBackdropUrl(movie.backdrop_path, "original")}
-          alt={movie.title}
-          fill
-          priority
-          className="object-cover"
-          sizes="100vw"
-        />
+    <div className="min-h-screen bg-[#141414] text-white pb-20">
+      
+      {/* 1. Immersive Hero Section */}
+      <div className="relative h-[70vh] md:h-[85vh] w-full">
+        {/* Backdrop */}
+        <div className="absolute inset-0">
+          <Image
+            src={getBackdropUrl(movie.backdrop_path, "original")}
+            alt={movie.title}
+            fill
+            priority
+            className="object-cover"
+            sizes="100vw"
+          />
+          {/* Vignette Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#141414] via-[#141414]/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent" />
+        </div>
 
-        {/* Multi-layer Gradient Overlays */}
-        <div className="absolute inset-0 bg-black/30" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/20 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#141414] via-[#141414]/40 to-transparent" />
-      </div>
-
-      {/* Content */}
-      <div className="relative -mt-96 z-10 pb-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row gap-12">
-            {/* Poster (Hidden on mobile, visible on desktop) */}
-            <div className="hidden md:block flex-shrink-0 w-80 rounded-lg shadow-2xl overflow-hidden transform transition-transform hover:scale-105 duration-300">
-              <div className="relative aspect-[2/3] w-full">
-                <Image
-                  src={getImageUrl(movie.poster_path, "w500")}
-                  alt={movie.title}
-                  fill
-                  className="object-cover"
-                  sizes="300px"
-                />
-              </div>
-            </div>
-
-            {/* Details */}
-            <div className="flex-1 space-y-6 pt-10 md:pt-32">
-              {/* Title */}
-              <h1 className="text-4xl md:text-6xl font-bold leading-tight drop-shadow-lg">
-                {movie.title}
-              </h1>
-
-              {/* Tagline */}
-              {movie.tagline && (
-                <p className="text-xl text-gray-300 italic font-light">
-                  <span className="text-primary mr-2">|</span>
-                  {movie.tagline}
-                </p>
-              )}
-
-              {/* Meta Info */}
-              <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-gray-300">
-                <span className={`font-bold ${movie.vote_average >= 7 ? 'text-green-400' : 'text-yellow-400'}`}>
-                  {Math.round(movie.vote_average * 10)}% Match
-                </span>
-                <span>{movie.release_date?.split("-")[0]}</span>
-                <span className="border border-gray-500 px-2 py-0.5 rounded text-xs">
-                  {certification}
-                </span>
-                <span>{formatRuntime(movie.runtime)}</span>
-                <span className="border border-gray-500 px-2 py-0.5 rounded text-xs">
-                  HD
-                </span>
+        {/* Content Container */}
+        <div className="absolute inset-0 flex items-center">
+          <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-20">
+            <div className="max-w-2xl space-y-6">
+              
+              {/* Logo / Title Area */}
+              <div className="space-y-4">
+                 <h1 className="text-5xl md:text-7xl font-black text-white drop-shadow-2xl leading-none tracking-tight">
+                   {movie.title}
+                 </h1>
+                 
+                 {/* Metadata Line */}
+                 <div className="flex items-center space-x-4 text-sm md:text-base font-medium text-gray-200">
+                    <span className="text-[#46d369] font-bold">{Math.round(movie.vote_average * 10)}% Match</span>
+                    <span>{movie.release_date?.split("-")[0]}</span>
+                    <span className="border border-gray-400 px-2 py-0.5 text-xs rounded text-gray-300">{certification}</span>
+                    <span>{formatRuntime(movie.runtime)}</span>
+                    <span className="border border-white/40 px-2 py-0.5 text-xs rounded">HD</span>
+                 </div>
               </div>
 
-              {/* Genres */}
-              <div className="flex flex-wrap gap-2">
-                {movie.genres.map((genre) => (
-                  <Link
-                    key={genre.id}
-                    href={`/browse/genre/${genre.id}`}
-                    className="text-sm text-gray-300 hover:text-white hover:underline transition-colors"
-                  >
-                    {genre.name}
-                  </Link>
-                ))}
+              {/* Tagline & Overview */}
+              <div>
+                 {movie.tagline && <p className="text-lg text-gray-300 italic mb-2 opacity-80">{movie.tagline}</p>}
+                 <p className="text-lg text-white drop-shadow-md line-clamp-3 leading-relaxed font-normal">
+                   {movie.overview}
+                 </p>
               </div>
 
               {/* Actions */}
-              <MovieControls id={movieId} trailerKey={trailer?.key} />
-
-              {/* Overview */}
-              <div className="max-w-3xl">
-                <h3 className="text-lg font-semibold mb-2">Overview</h3>
-                <p className="text-gray-300 leading-relaxed text-lg">
-                  {movie.overview || "No overview available."}
-                </p>
+              <div className="pt-2">
+                <MovieControls id={movieId} trailerKey={trailer?.key} title={movie.title} />
               </div>
 
-              {/* Cast & Crew Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6 pt-6 border-t border-gray-800">
-                {director && (
-                  <div>
-                    <span className="block text-sm text-gray-500 mb-1">Director</span>
-                    <span className="text-white font-medium">
-                      {director.name}
-                    </span>
-                  </div>
-                )}
-                {writers.length > 0 && (
-                  <div>
-                    <span className="block text-sm text-gray-500 mb-1">Writers</span>
-                    <span className="text-white font-medium">
-                      {writers.map((w) => w.name).join(", ")}
-                    </span>
-                  </div>
-                )}
-                <div>
-                  <span className="block text-sm text-gray-500 mb-1">Cast</span>
-                  <span className="text-white font-medium">
-                    {cast
-                      .slice(0, 4)
-                      .map((c) => c.name)
-                      .join(", ")}
-                  </span>
-                </div>
-                <div>
-                  <span className="block text-sm text-gray-500 mb-1">Status</span>
-                  <span className="text-white font-medium">{movie.status}</span>
-                </div>
+              {/* Quick Cast (Hero Footer) */}
+              <div className="hidden md:block pt-4 text-sm text-gray-400">
+                 <p>
+                   <span className="text-gray-500">Starring: </span>
+                   {cast.slice(0, 3).map(c => c.name).join(", ")}
+                 </p>
+                 {director && (
+                   <p className="mt-1">
+                     <span className="text-gray-500">Director: </span>
+                     <span className="text-white">{director.name}</span>
+                   </p>
+                 )}
               </div>
-            </div>
-          </div>
 
-          {/* Cast Section */}
-          {cast.length > 0 && (
-            <div className="mt-20">
-              <h2 className="text-2xl font-bold mb-6 flex items-center">
-                <span className="w-1 h-6 bg-primary mr-3 rounded-full"></span>
-                Top Cast
-              </h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                {cast.map((member) => (
-                  <div
-                    key={member.id}
-                    className="bg-gray-900 rounded-lg overflow-hidden hover:bg-gray-800 transition-colors group"
-                  >
-                    <div className="relative aspect-[2/3] overflow-hidden">
-                      {member.profile_path ? (
-                        <Image
-                          src={getImageUrl(member.profile_path, "w185")}
-                          alt={member.name}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
-                          sizes="128px"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gray-800 text-gray-600">
-                          <svg
-                            className="w-12 h-12"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                          </svg>
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-3">
-                      <p className="font-bold text-sm truncate text-white group-hover:text-primary transition-colors">
-                        {member.name}
-                      </p>
-                      <p className="text-xs text-gray-400 truncate">
-                        {member.character}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
             </div>
-          )}
-
-          {/* Recommendations */}
-          {recommendations.length > 0 && (
-            <div className="mt-16">
-              <MovieRow
-                title="Recommended For You"
-                items={recommendations.map((m) => ({
-                  ...m,
-                  media_type: "movie" as const,
-                }))}
-              />
-            </div>
-          )}
-
-          {/* Similar Movies */}
-          {similarMovies.length > 0 && (
-            <div className="mt-8">
-              <MovieRow
-                title="More Like This"
-                items={similarMovies.map((m) => ({
-                  ...m,
-                  media_type: "movie" as const,
-                }))}
-              />
-            </div>
-          )}
-
-          {/* Back Button */}
-          <div className="mt-16 pt-8 border-t border-gray-800">
-            <Link
-              href="/"
-              className="inline-flex items-center text-gray-400 hover:text-white transition-colors group"
-            >
-              <svg
-                className="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                />
-              </svg>
-              <span>Back to Home</span>
-            </Link>
           </div>
         </div>
+      </div>
+
+      {/* 2. Main Content Grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          
+          {/* LEFT: Main Content */}
+          <div className="lg:col-span-8 space-y-10">
+             
+             {/* Top Cast Slider */}
+             <section>
+               <h2 className="text-xl font-bold mb-4 text-white">Top Cast</h2>
+               <CastSlider cast={cast} />
+             </section>
+
+          </div>
+
+          {/* RIGHT: About Section (Sidebar) */}
+          <div className="lg:col-span-4 space-y-10">
+             
+             {/* About Metadata */}
+             <div>
+               <h3 className="text-lg font-medium text-white mb-4">About <span className="font-bold">{movie.title}</span></h3>
+               
+               <div className="space-y-4 text-sm">
+                 {director && (
+                   <div>
+                     <span className="block text-gray-500 mb-1">Director</span>
+                     <div className="text-white">{director.name}</div>
+                   </div>
+                 )}
+                 
+                 {writers.length > 0 && (
+                   <div>
+                     <span className="block text-gray-500 mb-1">Writers</span>
+                     <div className="text-white">{writers.map(w => w.name).join(", ")}</div>
+                   </div>
+                 )}
+
+                 <div>
+                   <span className="block text-gray-500 mb-1">Genres</span>
+                   <div className="flex flex-wrap gap-2">
+                     {movie.genres.map((g) => (
+                       <Link key={g.id} href={`/browse/genre/${g.id}`} className="text-white hover:underline">
+                         {g.name}
+                       </Link>
+                     ))}
+                   </div>
+                 </div>
+
+                 <div>
+                   <span className="block text-gray-500 mb-1">Maturity Rating</span>
+                   <div className="flex items-center gap-2">
+                     <span className="border border-white/40 px-2 py-0.5 text-xs rounded text-white">{certification}</span>
+                     <span className="text-white">Recommended for ages {certification === 'R' ? '17+' : '13+'}</span>
+                   </div>
+                 </div>
+               </div>
+             </div>
+
+          </div>
+        </div>
+
+        {/* 3. More Like This (Grid Layout) */}
+        {allRelatedMovies.length > 0 && (
+          <div className="mt-24 border-t border-[#404040] pt-12">
+            <h2 className="text-2xl font-bold mb-6 text-white">More Like This</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              {allRelatedMovies.map((m) => (
+                <div key={m.id} className="transform transition-transform hover:scale-105 duration-300">
+                   <MovieCard 
+                     item={{ ...m, media_type: 'movie' }} 
+                     fullWidth
+                   />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );

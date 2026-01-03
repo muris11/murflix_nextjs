@@ -38,19 +38,17 @@ export default function MovieRow({ title, items, priority = false }: MovieRowPro
   if (!items || items.length === 0) return null;
 
   return (
-    <section className="py-4 md:py-8 space-y-4 group">
+    <section className="py-0.5 md:py-1 space-y-1 group">
       {/* Title */}
       <div className="px-4 sm:px-6 lg:px-8">
-        <h2 className="text-xl md:text-2xl font-bold text-white transition-colors hover:text-primary flex items-center cursor-pointer">
-          {title}
-          <svg 
-            className="w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transition-all duration-300 text-primary transform group-hover:translate-x-1"
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
+        <h2 className="group/title inline-flex items-center gap-2 text-sm md:text-lg font-bold text-[#e5e5e5] hover:text-white transition-colors cursor-pointer mb-1">
+          <span>{title}</span>
+          <div className="flex items-center opacity-0 -translate-x-2 group-hover/title:opacity-100 group-hover/title:translate-x-0 transition-all duration-300 text-[#E50914] text-[10px] md:text-xs font-bold mt-0.5 tracking-wide">
+            <span className="whitespace-nowrap">Explore All</span>
+            <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
         </h2>
       </div>
 
@@ -73,7 +71,7 @@ export default function MovieRow({ title, items, priority = false }: MovieRowPro
         <div
           ref={rowRef}
           onScroll={handleScroll}
-          className="flex space-x-4 overflow-x-auto scrollbar-hide px-4 sm:px-6 lg:px-8 pb-8 pt-4 -mt-4 scroll-smooth"
+          className="flex space-x-2 overflow-x-auto scrollbar-hide px-4 sm:px-6 lg:px-8 pb-4 pt-2 -mt-2 scroll-smooth"
         >
           {items.map((item, index) => (
             <MovieCard 

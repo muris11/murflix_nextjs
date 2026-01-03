@@ -2,48 +2,27 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Footer() {
-  const footerLinks = [
-    {
-      title: "Navigation",
-      links: [
-        { label: "Home", href: "/" },
-        { label: "TV Shows", href: "/browse/tv" },
-        { label: "Movies", href: "/browse/movies" },
-        { label: "New & Popular", href: "/browse/new" },
-      ],
-    },
-    {
-      title: "Help",
-      links: [
-        { label: "FAQ", href: "/faq" },
-        { label: "Help Center", href: "/help" },
-        { label: "Contact Us", href: "/contact" },
-      ],
-    },
-    {
-      title: "Legal",
-      links: [
-        { label: "Terms of Service", href: "/terms" },
-        { label: "Privacy Policy", href: "/privacy" },
-        { label: "Cookie Preferences", href: "/cookies" },
-      ],
-    },
-    {
-      title: "About",
-      links: [
-        { label: "About Murflix", href: "/about" },
-        { label: "Corporate Info", href: "/corporate" },
-        { label: "Media Center", href: "/media" },
-      ],
-    },
+  const links = [
+    { label: "Home", href: "/" },
+    { label: "TV Shows", href: "/browse/tv" },
+    { label: "Movies", href: "/browse/movies" },
+    { label: "New & Popular", href: "/browse/new" },
+    { label: "FAQ", href: "/faq" },
+    { label: "Help Center", href: "/help" },
+    { label: "Contact Us", href: "/contact" },
+    { label: "Terms of Service", href: "/terms" },
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Cookie Preferences", href: "/cookies" },
+    { label: "Corporate Info", href: "/corporate" },
+    { label: "Media Center", href: "/media" },
   ];
 
   const socialLinks = [
     {
-      name: "Twitter",
+      name: "Facebook",
       icon: (
         <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
+          <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
         </svg>
       ),
     },
@@ -56,6 +35,14 @@ export default function Footer() {
       ),
     },
     {
+      name: "Twitter",
+      icon: (
+        <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
+        </svg>
+      ),
+    },
+    {
       name: "YouTube",
       icon: (
         <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
@@ -63,22 +50,11 @@ export default function Footer() {
         </svg>
       ),
     },
-    {
-      name: "Facebook",
-      icon: (
-        <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
-        </svg>
-      ),
-    },
   ];
 
   return (
-    <footer className="bg-[#141414] text-gray-400 mt-auto">
-      {/* Gradient top accent */}
-      <div className="h-2 w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-20" />
-      
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <footer className="bg-[#141414] text-[#808080] mt-20 pb-12 text-[13px]">
+      <div className="mx-auto max-w-[1000px] px-4 sm:px-6 lg:px-8">
         {/* Social Links */}
         <div className="flex space-x-6 mb-8">
           {socialLinks.map((social) => (
@@ -93,74 +69,40 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* Links Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12 text-sm">
-          {footerLinks.map((section) => (
-            <div key={section.title} className="space-y-4">
-              <h3 className="text-white font-semibold uppercase tracking-wider text-xs hidden md:block">
-                {section.title}
-              </h3>
-              <ul className="space-y-3">
-                {section.links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="hover:underline hover:text-white transition-colors block"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+        {/* Simple Grid Links */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-3 gap-x-4 mb-6">
+          {links.map((link) => (
+            <div key={link.label} className="mb-1">
+              <Link
+                href={link.href}
+                className="hover:underline transition-colors block"
+              >
+                {link.label}
+              </Link>
             </div>
           ))}
         </div>
 
         {/* Bottom Section */}
-        <div className="pt-8 border-t border-gray-800/50">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            {/* Logo & TMDB Attribution */}
-            <div className="space-y-4">
-              <div className="flex items-center space-x-4">
-                <Link href="/" className="group">
-                  <h2 className="text-xl font-bold text-primary tracking-widest group-hover:text-red-600 transition-colors">
-                    MURFLIX
-                  </h2>
-                </Link>
-                <div className="h-4 w-px bg-gray-700" />
-                <span className="text-xs text-gray-500">
-                  Your Movie Streaming Hub
-                </span>
-              </div>
-              <div className="flex items-center space-x-3 bg-white/5 w-fit px-3 py-1.5 rounded-lg border border-white/5 hover:bg-white/10 transition-colors">
-                <a
-                  href="https://www.themoviedb.org/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="opacity-70 hover:opacity-100 transition-opacity"
-                >
-                  <Image
-                    src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg"
-                    alt="TMDB Logo"
-                    width={60}
-                    height={20}
-                    className="h-4 w-auto"
-                  />
-                </a>
-                <span className="text-[10px] leading-tight text-gray-500 max-w-[200px]">
-                  This product uses the TMDB API but is not endorsed or certified by TMDB.
-                </span>
-              </div>
-            </div>
+        <div className="space-y-4">
+          <button className="border border-[#808080] text-[#808080] hover:text-white px-2 py-1 text-[13px] hover:border-white transition-colors">
+            Service Code
+          </button>
+          
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-[11px]">
+            <p>
+              &copy; 1997-{new Date().getFullYear()} Murflix, Inc.
+            </p>
             
-            {/* Copyright */}
-            <div className="text-xs text-gray-600 flex flex-col md:items-end">
-              <p>
-                &copy; {new Date().getFullYear()} Murflix. All rights reserved.
-              </p>
-              <p className="mt-1">
-                Made with <span className="text-red-500">♥</span> for movie lovers
-              </p>
+            <div className="flex items-center space-x-3 opacity-60 hover:opacity-100 transition-opacity">
+              <Image
+                src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg"
+                alt="TMDB Logo"
+                width={60}
+                height={20}
+                className="h-3 w-auto"
+              />
+              <span>Powered by TMDB</span>
             </div>
           </div>
         </div>

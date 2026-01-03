@@ -1,9 +1,21 @@
-import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 
 import "./globals.css";
 import AppShell from "@/components/AppShell";
+import BackToTop from "@/components/BackToTop";
 import { AuthProvider } from "@/contexts/AuthContext";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const viewport: Viewport = {
+  themeColor: "#141414",
+  width: "device-width",
+  initialScale: 1,
+  // Removed maximumScale and userScalable: false for accessibility
+  // Users should be able to zoom for better readability
+};
 
 export const metadata: Metadata = {
   title: "Murflix - Your Movie Streaming Hub",
@@ -11,13 +23,6 @@ export const metadata: Metadata = {
   keywords: ["movies", "tv shows", "streaming", "entertainment", "murflix"],
   authors: [{ name: "Murflix" }],
   manifest: "/manifest.webmanifest",
-  themeColor: "#141414",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false, // Prevents zooming issues in standalone mode
-  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -36,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={inter.className}>
       <body suppressHydrationWarning>
         <Script
           id="strip-bis-attrs"
@@ -46,7 +51,10 @@ export default function RootLayout({
           }}
         />
         <AuthProvider>
-          <AppShell>{children}</AppShell>
+          <AppShell>
+            {children}
+            <BackToTop />
+          </AppShell>
         </AuthProvider>
       </body>
     </html>
