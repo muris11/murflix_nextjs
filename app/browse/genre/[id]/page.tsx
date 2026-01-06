@@ -12,9 +12,8 @@ interface GenrePageProps {
 
 export default async function GenrePage({ params, searchParams }: GenrePageProps) {
   const { id } = await params;
-  const { type = 'movie' } = await searchParams;
+  const { type: requestedType } = await searchParams;
   const genreId = parseInt(id);
-  const initialPage = 1;
 
   if (isNaN(genreId)) {
     notFound();
@@ -26,6 +25,24 @@ export default async function GenrePage({ params, searchParams }: GenrePageProps
     fetchTVGenres(),
   ]);
 
+  // Check which genre list contains this ID
+  const isMovieGenre = movieGenres.genres.some(g => g.id === genreId);
+  const isTVGenre = tvGenres.genres.some(g => g.id === genreId);
+
+  // Determine the actual type to use
+  let type: 'movie' | 'tv';
+  if (requestedType === 'tv' && isTVGenre) {
+    type = 'tv';
+  } else if (requestedType === 'movie' && isMovieGenre) {
+    type = 'movie';
+  } else if (isMovieGenre) {
+    type = 'movie';
+  } else if (isTVGenre) {
+    type = 'tv';
+  } else {
+    notFound();
+  }
+
   const allGenres = [...movieGenres.genres, ...tvGenres.genres];
   const genre = allGenres.find(g => g.id === genreId);
   
@@ -33,13 +50,14 @@ export default async function GenrePage({ params, searchParams }: GenrePageProps
     notFound();
   }
 
-  // Fetch content based on type (Initial Load)
+  // Fetch content based on type (Initial Load - 2 pages for 24 items)
   const isMovie = type === 'movie';
-  const data = isMovie 
-    ? await discoverMoviesByGenre(genreId, initialPage)
-    : await discoverTVByGenre(genreId, initialPage);
+  const [data1, data2] = await Promise.all([
+    isMovie ? discoverMoviesByGenre(genreId, 1) : discoverTVByGenre(genreId, 1),
+    isMovie ? discoverMoviesByGenre(genreId, 2) : discoverTVByGenre(genreId, 2),
+  ]);
 
-  const items: MediaItem[] = data.results.map(item => ({
+  const items: MediaItem[] = [...data1.results, ...data2.results].slice(0, 24).map((item) => ({
     ...item,
     media_type: isMovie ? 'movie' : 'tv'
   } as MediaItem));
@@ -58,45 +76,48 @@ export default async function GenrePage({ params, searchParams }: GenrePageProps
               {genre.name}
             </h1>
             <p className="text-gray-400">
-              {data.total_results.toLocaleString()} {isMovie ? 'movies' : 'TV shows'} available
+              {data1.total_results.toLocaleString()} {isMovie ? 'movies' : 'TV shows'} available
             </p>
           </div>
 
-          <div className="flex bg-gray-900 p-1 rounded-lg self-start md:self-auto">
-            <Link
-              href={`/browse/genre/${genreId}?type=movie`}
-              className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${
-                isMovie ? 'bg-gray-800 text-white shadow-sm' : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              Movies
-            </Link>
-            <Link
-              href={`/browse/genre/${genreId}?type=tv`}
-              className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${
-                !isMovie ? 'bg-gray-800 text-white shadow-sm' : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              TV Shows
-            </Link>
-          </div>
+          {/* Only show toggle if genre exists in both movie and TV */}
+          {isMovieGenre && isTVGenre && (
+            <div className="flex bg-gray-900 p-1 rounded-lg self-start md:self-auto">
+              <Link
+                href={`/browse/genre/${genreId}?type=movie`}
+                className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${
+                  isMovie ? 'bg-gray-800 text-white shadow-sm' : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                Movies
+              </Link>
+              <Link
+                href={`/browse/genre/${genreId}?type=tv`}
+                className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${
+                  !isMovie ? 'bg-gray-800 text-white shadow-sm' : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                TV Shows
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Grid */}
       <div className="max-w-[1920px] mx-auto">
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-2">
-          {items.map((item) => (
-            <MovieCard key={item.id} item={item} fullWidth />
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
+          {items.map((item, index) => (
+            <MovieCard key={`${item.id}-${index}`} item={item} fullWidth />
           ))}
         </div>
 
         {/* Load More Component */}
         <LoadMore 
-          initialPage={initialPage} 
+          initialPage={2} 
           genreId={genreId} 
           type={isMovie ? 'movie' : 'tv'} 
-          totalPages={Math.min(data.total_pages, 500)} 
+          totalPages={Math.min(data1.total_pages, 500)} 
         />
 
         {/* Back Link */}

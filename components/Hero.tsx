@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
-import { fetchMovieVideos, fetchTVVideos, getBackdropUrl } from "@/lib/tmdb";
-import { MediaItem } from "@/types/tmdb";
+import { getBackdropUrl } from "@/lib/image";
+import { MediaItem, Video } from "@/types/tmdb";
 
 import Icon from "@/components/ui/Icon";
 
@@ -30,16 +30,17 @@ export default function Hero({ items }: HeroProps) {
     .slice(0, 5);
 
   const currentItem = featuredItems[currentIndex];
+  
+  // Reset background video when currentIndex changes - intentional sync when slide changes
+  useEffect(() => {
+    setShowBackgroundVideo(false);
+  }, [currentIndex]);
 
   useEffect(() => {
-    // Reset background video when item changes
-    setShowBackgroundVideo(false);
-    
     if (featuredItems.length <= 1 || isPlayerOpen) return;
 
     const timer = setInterval(() => {
       setIsTransitioning(true);
-      setShowBackgroundVideo(false); // Hide video during transition
       setTimeout(() => {
         setCurrentIndex((current) =>
           current === featuredItems.length - 1 ? 0 : current + 1
@@ -55,14 +56,13 @@ export default function Hero({ items }: HeroProps) {
     if (!currentItem) return;
     const mediaType = currentItem.media_type || "movie";
     try {
-      const data =
-        mediaType === "tv"
-          ? await fetchTVVideos(currentItem.id)
-          : await fetchMovieVideos(currentItem.id);
+      const response = await fetch(`/api/videos?id=${currentItem.id}&type=${mediaType}`);
+      if (!response.ok) throw new Error('Failed to fetch videos');
+      const data = await response.json();
       const videos = data.results || [];
-      const trailer = videos.find((v: any) => v.type === "Trailer" && v.site === "YouTube") ||
-                     videos.find((v: any) => v.type === "Teaser" && v.site === "YouTube") ||
-                     videos.find((v: any) => v.site === "YouTube");
+      const trailer = videos.find((v: Video) => v.type === "Trailer" && v.site === "YouTube") ||
+                     videos.find((v: Video) => v.type === "Teaser" && v.site === "YouTube") ||
+                     videos.find((v: Video) => v.site === "YouTube");
 
       if (trailer) {
         const key = trailer.key;
@@ -83,15 +83,11 @@ export default function Hero({ items }: HeroProps) {
   }, [currentItem]);
 
   useEffect(() => {
-    // Cleanup function for the video timer inside fetchTrailer
-    const cleanup = fetchTrailer();
-    return () => {
-      if (cleanup && typeof cleanup === 'function') {
-        // cleanup(); // fetching is async, this logic is tricky here. 
-        // Simpler: fetchTrailer handles state, we just reset on unmount/change via the other useEffect
-      } 
-      setShowBackgroundVideo(false);
+    const loadTrailer = async () => {
+      await fetchTrailer();
     };
+    
+    loadTrailer();
   }, [fetchTrailer]);
 
   const handlePlay = () => {

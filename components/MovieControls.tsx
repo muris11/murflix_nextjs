@@ -1,7 +1,6 @@
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
-import { addToWatchlist, getMovieAccountStates, getTVAccountStates } from "@/lib/account";
 import { useCallback, useEffect, useState } from "react";
 
 import VideoPlayerModal from "./VideoPlayerModal";
@@ -24,7 +23,7 @@ export default function MovieControls({ id, mediaType = 'movie', trailerKey, sea
   const [isListLoading, setIsListLoading] = useState(false);
   
   // Auth & TMDB Session
-  const { user } = useAuth();
+  useAuth(); // Check auth state
   const [tmdbSessionId, setTmdbSessionId] = useState<string | null>(null);
   const [tmdbAccountId, setTmdbAccountId] = useState<number | null>(null);
 
@@ -47,9 +46,9 @@ export default function MovieControls({ id, mediaType = 'movie', trailerKey, sea
   const checkStatus = useCallback(async () => {
     if (!tmdbSessionId) return;
     try {
-      const status = mediaType === 'movie' 
-        ? await getMovieAccountStates(id, tmdbSessionId)
-        : await getTVAccountStates(id, tmdbSessionId);
+      const response = await fetch(`/api/account?id=${id}&type=${mediaType}&sessionId=${tmdbSessionId}`);
+      if (!response.ok) throw new Error('Failed to get account states');
+      const status = await response.json();
       setIsInWatchlist(status.watchlist);
     } catch (error) {
       console.error("Failed to check watchlist status:", error);
@@ -82,13 +81,18 @@ export default function MovieControls({ id, mediaType = 'movie', trailerKey, sea
 
     setIsListLoading(true);
     try {
-      await addToWatchlist(
-        tmdbAccountId,
-        tmdbSessionId,
-        mediaType,
-        id,
-        !isInWatchlist
-      );
+      const response = await fetch('/api/account', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          accountId: tmdbAccountId,
+          sessionId: tmdbSessionId,
+          mediaType,
+          mediaId: id,
+          watchlist: !isInWatchlist,
+        }),
+      });
+      if (!response.ok) throw new Error('Failed to update watchlist');
       setIsInWatchlist(!isInWatchlist);
     } catch (error) {
       console.error("Failed to update watchlist:", error);

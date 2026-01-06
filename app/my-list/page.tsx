@@ -2,14 +2,6 @@
 
 import MovieCard from "@/components/MovieCard";
 import { useAuth } from "@/contexts/AuthContext";
-import {
-  getFavoriteMovies,
-  getFavoriteTVShows,
-  getRatedMovies,
-  getRatedTVShows,
-  getWatchlistMovies,
-  getWatchlistTVShows,
-} from "@/lib/account";
 import { MediaItem, Movie, TVShow } from "@/types/tmdb";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
@@ -60,22 +52,18 @@ export default function MyListPage() {
 
     setIsLoading(true);
     try {
-      const [favMovies, favTV, wlMovies, wlTV, rtdMovies, rtdTV] =
-        await Promise.all([
-          getFavoriteMovies(tmdbAccount.id, tmdbSessionId),
-          getFavoriteTVShows(tmdbAccount.id, tmdbSessionId),
-          getWatchlistMovies(tmdbAccount.id, tmdbSessionId),
-          getWatchlistTVShows(tmdbAccount.id, tmdbSessionId),
-          getRatedMovies(tmdbAccount.id, tmdbSessionId),
-          getRatedTVShows(tmdbAccount.id, tmdbSessionId),
-        ]);
+      const response = await fetch(
+        `/api/lists?accountId=${tmdbAccount.id}&sessionId=${tmdbSessionId}&type=all`
+      );
+      if (!response.ok) throw new Error('Failed to fetch list data');
+      const data = await response.json();
 
-      setFavoriteMovies(favMovies.results);
-      setFavoriteTVShows(favTV.results);
-      setWatchlistMovies(wlMovies.results);
-      setWatchlistTVShows(wlTV.results);
-      setRatedMovies(rtdMovies.results);
-      setRatedTVShows(rtdTV.results);
+      setFavoriteMovies(data.favoriteMovies);
+      setFavoriteTVShows(data.favoriteTVShows);
+      setWatchlistMovies(data.watchlistMovies);
+      setWatchlistTVShows(data.watchlistTVShows);
+      setRatedMovies(data.ratedMovies);
+      setRatedTVShows(data.ratedTVShows);
     } catch (error) {
       console.error("Failed to fetch data:", error);
     } finally {

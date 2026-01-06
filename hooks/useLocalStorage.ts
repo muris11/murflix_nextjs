@@ -13,13 +13,14 @@ export function useLocalStorage<T>(
   const [storedValue, setStoredValue] = useState<T>(initialValue);
   const [isHydrated, setIsHydrated] = useState(false);
 
-  // Get from localStorage on mount
+  // Get from localStorage on mount - intentional sync with external storage
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     try {
       const item = window.localStorage.getItem(key);
       if (item) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setStoredValue(JSON.parse(item));
       }
     } catch (error) {

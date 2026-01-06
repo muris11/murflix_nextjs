@@ -1,6 +1,8 @@
 import Hero from '@/components/Hero';
 import MovieRow from '@/components/MovieRow';
 import {
+    discoverMoviesByCountry,
+    discoverTVByCountry,
     fetchAiringTodayTV,
     fetchNowPlayingMovies,
     fetchOnTheAirTV,
@@ -25,6 +27,8 @@ export default async function HomePage() {
     upcomingData,
     onTheAirData,
     airingTodayData,
+    indonesianMoviesData,
+    indonesianTVData,
   ] = await Promise.all([
     fetchTrending('all', 'week'),
     fetchTrending('movie', 'day'),
@@ -37,6 +41,8 @@ export default async function HomePage() {
     fetchUpcomingMovies(),
     fetchOnTheAirTV(),
     fetchAiringTodayTV(),
+    discoverMoviesByCountry('ID', 1),
+    discoverTVByCountry('ID', 1),
   ]);
 
   return (
@@ -52,6 +58,16 @@ export default async function HomePage() {
           title="Trending Now"
           items={trendingData.results}
           priority
+        />
+
+        <MovieRow
+          title="Film Indonesia Terbaru"
+          items={indonesianMoviesData.results.map(m => ({ ...m, media_type: 'movie' as const }))}
+        />
+
+        <MovieRow
+          title="Serial TV Indonesia"
+          items={indonesianTVData.results.map(t => ({ ...t, media_type: 'tv' as const }))}
         />
 
         <MovieRow

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 
-import { getBackdropUrl, getImageUrl } from "@/lib/tmdb";
+import { getBackdropUrl, getImageUrl } from "@/lib/image";
 import { MediaItem, Movie, TVShow } from "@/types/tmdb";
 import { useMediaQuery, breakpoints } from "@/hooks";
 

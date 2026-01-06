@@ -1,7 +1,7 @@
 import MovieControls from "@/components/MovieControls";
 import MovieCard from "@/components/MovieCard";
 import CastSlider from "@/components/CastSlider"; 
-import { fetchMovieDetails, getBackdropUrl, getImageUrl } from "@/lib/tmdb";
+import { fetchMovieDetails, getBackdropUrl } from "@/lib/tmdb";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";

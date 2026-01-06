@@ -12,7 +12,7 @@ export default function AboutPage() {
         {/* Mission Statement */}
         <section className="text-center space-y-8 animate-slide-up">
           <p className="text-2xl md:text-3xl font-light leading-relaxed text-gray-200">
-            "We believe stories have the power to move us. They make us feel more emotion, see new perspectives, and bring us closer to each other."
+            &ldquo;We believe stories have the power to move us. They make us feel more emotion, see new perspectives, and bring us closer to each other.&rdquo;
           </p>
         </section>
 

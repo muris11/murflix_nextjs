@@ -28,6 +28,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [config, setConfig] = useState<TMDBConfig | null>(null);
   const [dropdownSearch, setDropdownSearch] = useState("");
@@ -37,8 +38,7 @@ export default function Navbar() {
   // Use scroll lock hook for mobile menu
   useScrollLock(isMobileMenuOpen);
   
-  // Debounce dropdown search for better performance
-  const debouncedDropdownSearch = useDebounce(dropdownSearch, 150);
+  // Debounce search query for better performance
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   // Instant Search Effect
@@ -101,16 +101,6 @@ export default function Navbar() {
       );
     },
     []
-  );
-
-  // Use debounced search for filtering
-  const getFilteredItems = useCallback(
-    (items: { label: string; href: string }[], searchable: boolean) => {
-      return searchable
-        ? filterItems(items, debouncedDropdownSearch)
-        : items;
-    },
-    [filterItems, debouncedDropdownSearch]
   );
 
   const genres = config?.genres || [];
@@ -258,37 +248,78 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="flex items-center gap-6">
-            {/* Search Bar (Desktop) */}
-            <div className="hidden md:block relative group">
-              <form onSubmit={handleSearch} className="relative flex items-center">
-                <svg
-                  className={`h-6 w-6 text-white absolute left-2 transition-all duration-300 z-10 pointer-events-none ${searchQuery ? 'opacity-0' : 'opacity-100'}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2.5}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          <div className="flex items-center gap-4">
+            {/* Mobile Search - Expandable */}
+            <div className="md:hidden">
+              {isMobileSearchOpen ? (
+                <form onSubmit={handleSearch} className="flex items-center bg-black border border-white rounded">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search..."
+                    autoFocus
+                    className="w-[180px] sm:w-[220px] bg-transparent text-sm text-white px-3 py-2 focus:outline-none"
                   />
-                </svg>
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={searchQuery ? "" : "Titles, people, genres"}
-                  className={`bg-black/50 border border-white/80 text-sm text-white focus:outline-none focus:bg-black/80 transition-all duration-300 h-9 px-9
-                    ${searchQuery ? "w-64 pl-4 border-white" : "w-0 group-hover:w-64 focus:w-64 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer pl-10"}`}
-                />
-              </form>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsMobileSearchOpen(false);
+                      setSearchQuery("");
+                    }}
+                    className="text-gray-400 hover:text-white px-2"
+                  >
+                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </form>
+              ) : (
+                <button
+                  onClick={() => setIsMobileSearchOpen(true)}
+                  className="text-white p-2 rounded-md hover:bg-white/10 transition-colors"
+                  aria-label="Search"
+                >
+                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </button>
+              )}
             </div>
 
-            {/* Profile / Auth */}
+            {/* Desktop Search */}
+            <div className="relative hidden md:block">
+              {/* Desktop Search */}
+              <div className="hidden md:block relative group">
+                <form onSubmit={handleSearch} className="relative flex items-center">
+                  <svg
+                    className={`h-6 w-6 text-white absolute left-2 transition-all duration-300 z-10 pointer-events-none ${searchQuery ? 'opacity-0' : 'opacity-100'}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2.5}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder={searchQuery ? "" : "Titles, people, genres"}
+                    className={`bg-black/50 border border-white/80 text-sm text-white focus:outline-none focus:bg-black/80 transition-all duration-300 h-9 px-9
+                      ${searchQuery ? "w-64 pl-4 border-white" : "w-0 group-hover:w-64 focus:w-64 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer pl-10"}`}
+                  />
+                </form>
+              </div>
+            </div>
+
+            {/* Profile / Auth - Desktop Only */}
             {!isLoading && (
-              <div className="relative">
+              <div className="relative hidden md:block">
                 {isAuthenticated && profile ? (
                   <div
                     className="relative group"
@@ -486,25 +517,6 @@ export default function Navbar() {
                   Masuk
                 </Link>
               )}
-
-              {/* Mobile Search */}
-              <form onSubmit={handleSearch} className="relative mb-6">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search..."
-                  className="w-full bg-black border border-gray-700 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-white/50"
-                />
-                <button
-                  type="submit"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-                >
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </button>
-              </form>
 
               {/* Mobile Links */}
               <div className="space-y-6">

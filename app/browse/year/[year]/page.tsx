@@ -1,3 +1,4 @@
+import LoadMore from '@/components/LoadMore';
 import MovieCard from '@/components/MovieCard';
 import { discoverMoviesByYear, discoverTVByYear } from '@/lib/tmdb';
 import { MediaItem } from '@/types/tmdb';
@@ -6,14 +7,13 @@ import { notFound } from 'next/navigation';
 
 interface YearPageProps {
   params: Promise<{ year: string }>;
-  searchParams: Promise<{ type?: string; page?: string }>;
+  searchParams: Promise<{ type?: string }>;
 }
 
 export default async function YearPage({ params, searchParams }: YearPageProps) {
   const { year: yearStr } = await params;
-  const { type = 'movie', page = '1' } = await searchParams;
+  const { type = 'movie' } = await searchParams;
   const year = parseInt(yearStr);
-  const pageNum = parseInt(page);
   const currentYear = new Date().getFullYear();
 
   // Validate year
@@ -21,13 +21,14 @@ export default async function YearPage({ params, searchParams }: YearPageProps) 
     notFound();
   }
 
-  // Fetch content based on type
+  // Fetch content based on type (2 pages for 24 items)
   const isMovie = type === 'movie';
-  const data = isMovie 
-    ? await discoverMoviesByYear(year, pageNum)
-    : await discoverTVByYear(year, pageNum);
+  const [data1, data2] = await Promise.all([
+    isMovie ? discoverMoviesByYear(year, 1) : discoverTVByYear(year, 1),
+    isMovie ? discoverMoviesByYear(year, 2) : discoverTVByYear(year, 2),
+  ]);
 
-  const items: MediaItem[] = data.results.map(item => ({
+  const items: MediaItem[] = [...data1.results, ...data2.results].slice(0, 24).map((item) => ({
     ...item,
     media_type: isMovie ? 'movie' : 'tv'
   } as MediaItem));
@@ -47,7 +48,7 @@ export default async function YearPage({ params, searchParams }: YearPageProps) 
             <h1 className="text-5xl font-bold text-white">{year}</h1>
           </div>
           <p className="text-gray-400">
-            {data.total_results.toLocaleString()} {isMovie ? 'movies' : 'TV shows'} from {year}
+            {data1.total_results.toLocaleString()} {isMovie ? 'movies' : 'TV shows'} from {year}
           </p>
 
           {/* Type Toggle */}
@@ -103,9 +104,9 @@ export default async function YearPage({ params, searchParams }: YearPageProps) 
 
         {/* Grid */}
         {items.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-            {items.map((item) => (
-              <MovieCard key={item.id} item={item} fullWidth />
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
+            {items.map((item, index) => (
+              <MovieCard key={`${item.id}-${index}`} item={item} fullWidth />
             ))}
           </div>
         ) : (
@@ -114,30 +115,13 @@ export default async function YearPage({ params, searchParams }: YearPageProps) 
           </div>
         )}
 
-        {/* Pagination */}
-        {data.total_pages > 1 && (
-          <div className="flex justify-center items-center space-x-4 pt-8">
-            {pageNum > 1 && (
-              <Link
-                href={`/browse/year/${year}?type=${type}&page=${pageNum - 1}`}
-                className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors"
-              >
-                Previous
-              </Link>
-            )}
-            <span className="text-gray-400">
-              Page {pageNum} of {Math.min(data.total_pages, 500)}
-            </span>
-            {pageNum < Math.min(data.total_pages, 500) && (
-              <Link
-                href={`/browse/year/${year}?type=${type}&page=${pageNum + 1}`}
-                className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors"
-              >
-                Next
-              </Link>
-            )}
-          </div>
-        )}
+        {/* Load More */}
+        <LoadMore 
+          initialPage={2} 
+          year={year}
+          type={isMovie ? 'movie' : 'tv'} 
+          totalPages={Math.min(data1.total_pages, 500)} 
+        />
 
         {/* Back Link */}
         <div className="pt-8 border-t border-gray-800">

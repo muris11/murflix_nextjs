@@ -3,14 +3,12 @@
  * Handles favorites, watchlist, and rated items
  */
 
+import 'server-only';
+
 import { Movie, TMDBResponse, TVShow } from '@/types/tmdb';
 
-const BASE_URL = process.env.NEXT_PUBLIC_TMDB_BASE_URL || 'https://api.themoviedb.org/3';
-const ACCESS_TOKEN = process.env.NEXT_PUBLIC_TMDB_ACCESS_TOKEN;
-
-if (!ACCESS_TOKEN) {
-  console.error('⚠️ TMDB_ACCESS_TOKEN is not configured! API calls will fail.');
-}
+const BASE_URL = process.env.TMDB_BASE_URL || 'https://api.themoviedb.org/3';
+const ACCESS_TOKEN = process.env.TMDB_ACCESS_TOKEN;
 
 const accountOptions = {
   headers: {

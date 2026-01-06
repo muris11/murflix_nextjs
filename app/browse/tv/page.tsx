@@ -3,16 +3,23 @@ import { fetchOnTheAirTV, fetchPopularTV, fetchTopRatedTV } from '@/lib/tmdb';
 import Link from 'next/link';
 
 export default async function BrowseTVPage() {
-  const [popular, topRated, onTheAir] = await Promise.all([
-    fetchPopularTV(),
-    fetchTopRatedTV(),
-    fetchOnTheAirTV(),
+  const [
+    popular1, popular2,
+    topRated1, topRated2,
+    onTheAir1, onTheAir2,
+  ] = await Promise.all([
+    fetchPopularTV(1),
+    fetchPopularTV(2),
+    fetchTopRatedTV(1),
+    fetchTopRatedTV(2),
+    fetchOnTheAirTV(1),
+    fetchOnTheAirTV(2),
   ]);
 
   const categories = [
-    { title: 'Popular TV Shows', items: popular.results },
-    { title: 'Top Rated', items: topRated.results },
-    { title: 'Currently Airing', items: onTheAir.results },
+    { title: 'Popular TV Shows', items: [...popular1.results, ...popular2.results].slice(0, 24) },
+    { title: 'Top Rated', items: [...topRated1.results, ...topRated2.results].slice(0, 24) },
+    { title: 'Currently Airing', items: [...onTheAir1.results, ...onTheAir2.results].slice(0, 24) },
   ];
 
   return (
@@ -60,8 +67,8 @@ export default async function BrowseTVPage() {
               </h2>
             </div>
             
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-              {category.items.slice(0, 12).map((show) => (
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
+              {category.items.map((show) => (
                 <MovieCard key={show.id} item={{ ...show, media_type: 'tv' }} fullWidth />
               ))}
             </div>

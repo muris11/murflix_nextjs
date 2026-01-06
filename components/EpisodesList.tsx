@@ -1,7 +1,7 @@
 "use client";
 
 import { SeasonDetails } from "@/types/tmdb";
-import { getImageUrl } from "@/lib/tmdb";
+import { getImageUrl } from "@/lib/image";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -101,7 +101,6 @@ export default function EpisodesList({ tvId, season, seasons, currentSeasonNumbe
                  tmdbId={tvId} 
                  seasonNumber={season.season_number} 
                  episodeNumber={episode.episode_number}
-                 stillPath={episode.still_path}
                  seriesTitle={showName}
                  episodeTitle={episode.name}
               />

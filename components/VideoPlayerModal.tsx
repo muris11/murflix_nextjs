@@ -93,15 +93,17 @@ export default function VideoPlayerModal({
 
   const activeUrl = getSourceUrl();
 
-  // Reset state when opening
+  // Reset state when opening - this is intentional as we need to reset UI state when modal opens
   useEffect(() => {
     if (isOpen) {
+      // These setState calls are intentional - we need to reset UI state when modal opens/content changes
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsLoading(true);
       setCurrentServer(SERVERS[0].id);
-      const timer = setTimeout(() => setIsLoading(false), 4000); // slightly longer buffer
+      const timer = setTimeout(() => setIsLoading(false), 4000);
       return () => clearTimeout(timer);
     }
-  }, [isOpen, tmdbId, mediaType, season, episode]); // Reset only when content changes
+  }, [isOpen, tmdbId, mediaType, season, episode]);
 
   useEffect(() => {
     if (isOpen) {

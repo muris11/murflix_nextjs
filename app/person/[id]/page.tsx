@@ -2,7 +2,6 @@ import MovieCard from '@/components/MovieCard';
 import { fetchPersonDetails, getImageUrl, getProfileUrl } from '@/lib/tmdb';
 import { MediaItem } from '@/types/tmdb';
 import Image from 'next/image';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 interface PersonPageProps {
@@ -48,17 +47,6 @@ export default async function PersonPage({ params }: PersonPageProps) {
   const sortedCastCredits = [...castCredits]
     .sort((a, b) => (b.vote_average || 0) - (a.vote_average || 0))
     .slice(0, 30);
-
-  // Get unique crew roles
-  const uniqueCrewCredits = [...crewCredits]
-    .reduce((acc, curr) => {
-      if (!acc.find(c => c.id === curr.id && c.job === curr.job)) {
-        acc.push(curr);
-      }
-      return acc;
-    }, [] as typeof crewCredits)
-    .sort((a, b) => (b.vote_average || 0) - (a.vote_average || 0))
-    .slice(0, 20);
 
   // Get profile images
   const profileImages = person.images?.profiles || [];

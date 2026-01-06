@@ -3,12 +3,10 @@
  * Handles guest sessions, request tokens, and session management
  */
 
-const BASE_URL = process.env.NEXT_PUBLIC_TMDB_BASE_URL || 'https://api.themoviedb.org/3';
-const ACCESS_TOKEN = process.env.NEXT_PUBLIC_TMDB_ACCESS_TOKEN;
+import 'server-only';
 
-if (!ACCESS_TOKEN) {
-  console.error('⚠️ TMDB_ACCESS_TOKEN is not configured! API calls will fail.');
-}
+const BASE_URL = process.env.TMDB_BASE_URL || 'https://api.themoviedb.org/3';
+const ACCESS_TOKEN = process.env.TMDB_ACCESS_TOKEN;
 
 const authOptions = {
   headers: {

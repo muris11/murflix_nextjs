@@ -56,7 +56,7 @@ export default function FAQPage() {
         <div className="mt-16 text-center bg-gradient-to-r from-gray-900 to-black p-10 rounded-3xl border border-white/5">
           <h3 className="text-2xl font-bold mb-4">Still have questions?</h3>
           <p className="text-gray-400 mb-8 max-w-lg mx-auto">
-            Can't find the answer you're looking for? Please chat to our friendly team.
+            Can&apos;t find the answer you&apos;re looking for? Please chat to our friendly team.
           </p>
           <a 
             href="/contact" 

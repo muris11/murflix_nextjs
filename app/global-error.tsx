@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 interface GlobalErrorProps {
   error: Error & { digest?: string };
   reset: () => void;
@@ -91,7 +93,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
               Coba Lagi
             </button>
             
-            <a
+            <Link
               href="/"
               style={{
                 backgroundColor: 'transparent',
@@ -109,7 +111,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
               }}
             >
               Ke Beranda
-            </a>
+            </Link>
           </div>
 
           {/* Error digest */}

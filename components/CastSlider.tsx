@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { getImageUrl } from "@/lib/tmdb";
+import { getImageUrl } from "@/lib/image";
 import { CastMember } from "@/types/tmdb";
 
 interface CastSliderProps {

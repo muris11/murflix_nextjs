@@ -78,7 +78,6 @@ export default async function EpisodePage({ params }: EpisodePageProps) {
           tmdbId={tvId}
           seasonNumber={seasonNum}
           episodeNumber={episodeNum}
-          stillPath={episode.still_path}
           seriesTitle={tvShow.name}
           episodeTitle={episode.name}
         />

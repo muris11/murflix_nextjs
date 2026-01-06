@@ -18,7 +18,8 @@ export function useMediaQuery(query: string): boolean {
 
     const media = window.matchMedia(query);
     
-    // Set initial value
+    // Set initial value - intentional sync with browser media query state
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMatches(media.matches);
 
     // Modern browsers
@@ -37,11 +38,14 @@ export function useMediaQuery(query: string): boolean {
 
 // Predefined breakpoint hooks matching Tailwind defaults
 export function useIsMobile(): boolean {
-  return !useMediaQuery("(min-width: 640px)");
+  const isSmOrLarger = useMediaQuery("(min-width: 640px)");
+  return !isSmOrLarger;
 }
 
 export function useIsTablet(): boolean {
-  return useMediaQuery("(min-width: 640px)") && !useMediaQuery("(min-width: 1024px)");
+  const isSmOrLarger = useMediaQuery("(min-width: 640px)");
+  const isLgOrLarger = useMediaQuery("(min-width: 1024px)");
+  return isSmOrLarger && !isLgOrLarger;
 }
 
 export function useIsDesktop(): boolean {

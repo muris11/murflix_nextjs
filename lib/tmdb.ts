@@ -1,3 +1,5 @@
+import 'server-only';
+
 import {
     CastMember,
     CertificationList,
@@ -32,13 +34,8 @@ import {
     WatchProviders
 } from '@/types/tmdb';
 
-const BASE_URL = process.env.NEXT_PUBLIC_TMDB_BASE_URL || 'https://api.themoviedb.org/3';
-const ACCESS_TOKEN = process.env.NEXT_PUBLIC_TMDB_ACCESS_TOKEN;
-
-// Runtime guard for TMDB token
-if (!ACCESS_TOKEN) {
-  console.error('⚠️ TMDB_ACCESS_TOKEN is not configured! API calls will fail.');
-}
+const BASE_URL = process.env.TMDB_BASE_URL || 'https://api.themoviedb.org/3';
+const ACCESS_TOKEN = process.env.TMDB_ACCESS_TOKEN;
 
 const options = {
   method: 'GET',

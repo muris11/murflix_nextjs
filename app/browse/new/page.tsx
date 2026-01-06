@@ -3,16 +3,23 @@ import { fetchOnTheAirTV, fetchTrending, fetchUpcomingMovies } from '@/lib/tmdb'
 import Link from 'next/link';
 
 export default async function BrowseNewPage() {
-  const [trending, upcoming, onTheAir] = await Promise.all([
+  const [
+    trending1, trending2,
+    upcoming1, upcoming2,
+    onTheAir1, onTheAir2,
+  ] = await Promise.all([
     fetchTrending('all', 'day'),
-    fetchUpcomingMovies(),
-    fetchOnTheAirTV(),
+    fetchTrending('all', 'week'),
+    fetchUpcomingMovies(1),
+    fetchUpcomingMovies(2),
+    fetchOnTheAirTV(1),
+    fetchOnTheAirTV(2),
   ]);
 
   const categories = [
-    { title: 'Trending Today', items: trending.results },
-    { title: 'Upcoming Movies', items: upcoming.results.map(m => ({ ...m, media_type: 'movie' as const })) },
-    { title: 'New TV Episodes', items: onTheAir.results.map(t => ({ ...t, media_type: 'tv' as const })) },
+    { title: 'Trending Today', items: [...trending1.results, ...trending2.results].slice(0, 24) },
+    { title: 'Upcoming Movies', items: [...upcoming1.results, ...upcoming2.results].slice(0, 24).map(m => ({ ...m, media_type: 'movie' as const })) },
+    { title: 'New TV Episodes', items: [...onTheAir1.results, ...onTheAir2.results].slice(0, 24).map(t => ({ ...t, media_type: 'tv' as const })) },
   ];
 
   return (
@@ -60,8 +67,8 @@ export default async function BrowseNewPage() {
               </h2>
             </div>
             
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-              {category.items.slice(0, 12).map((item) => (
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
+              {category.items.map((item) => (
                 <MovieCard key={item.id} item={item} fullWidth />
               ))}
             </div>

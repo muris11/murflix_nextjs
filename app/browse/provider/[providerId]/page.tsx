@@ -15,9 +15,8 @@ export default async function ProviderPage({
   searchParams,
 }: ProviderPageProps) {
   const { providerId } = await params;
-  const { type = "movie", page = "1" } = await searchParams;
+  const { type = "movie" } = await searchParams;
   const provId = parseInt(providerId);
-  const pageNum = parseInt(page);
 
   if (isNaN(provId)) {
     notFound();
@@ -31,16 +30,14 @@ export default async function ProviderPage({
     notFound();
   }
 
-  // Fetch content from this provider
+  // Fetch content from this provider (2 pages for 24 items)
   const isMovie = type === "movie";
-  const data = await discoverByProvider(
-    provId,
-    isMovie ? "movie" : "tv",
-    "US",
-    pageNum
-  );
+  const [data1, data2] = await Promise.all([
+    discoverByProvider(provId, isMovie ? "movie" : "tv", "US", 1),
+    discoverByProvider(provId, isMovie ? "movie" : "tv", "US", 2),
+  ]);
 
-  const items: MediaItem[] = data.results.map(
+  const items: MediaItem[] = [...data1.results, ...data2.results].slice(0, 24).map(
     (item) =>
       ({
         ...item,
@@ -81,7 +78,7 @@ export default async function ProviderPage({
               </div>
               <h1 className="text-3xl font-bold text-white">{provider.provider_name}</h1>
               <p className="text-gray-400 mt-1">
-                {data.total_results.toLocaleString()}{" "}
+                {data1.total_results.toLocaleString()}{" "}
                 {isMovie ? "movies" : "TV shows"} available
               </p>
             </div>
@@ -142,7 +139,7 @@ export default async function ProviderPage({
 
         {/* Grid */}
         {items.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
             {items.map((item) => (
               <MovieCard key={item.id} item={item} fullWidth />
             ))}
@@ -155,32 +152,12 @@ export default async function ProviderPage({
           </div>
         )}
 
-        {/* Pagination */}
-        {data.total_pages > 1 && (
+        {/* Info */}
+        {data1.total_pages > 1 && (
           <div className="flex justify-center items-center space-x-4 pt-8">
-            {pageNum > 1 && (
-              <Link
-                href={`/browse/provider/${providerId}?type=${type}&page=${
-                  pageNum - 1
-                }`}
-                className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors"
-              >
-                Previous
-              </Link>
-            )}
             <span className="text-gray-400">
-              Page {pageNum} of {Math.min(data.total_pages, 500)}
+              Showing 24 of {data1.total_results.toLocaleString()} results
             </span>
-            {pageNum < Math.min(data.total_pages, 500) && (
-              <Link
-                href={`/browse/provider/${providerId}?type=${type}&page=${
-                  pageNum + 1
-                }`}
-                className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors"
-              >
-                Next
-              </Link>
-            )}
           </div>
         )}
 

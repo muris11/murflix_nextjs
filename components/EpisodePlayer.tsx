@@ -1,8 +1,6 @@
 "use client";
 
-import { useAuth } from "@/contexts/AuthContext";
-import { addToWatchlist, getMovieAccountStates, getTVAccountStates } from "@/lib/account";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
 import VideoPlayerModal from "@/components/VideoPlayerModal";
 
@@ -10,12 +8,11 @@ interface EpisodePlayerProps {
   tmdbId: number;
   seasonNumber: number;
   episodeNumber: number;
-  stillPath: string | null;
   seriesTitle?: string; // Add series title
   episodeTitle?: string; // Add episode title
 }
 
-export default function EpisodePlayer({ tmdbId, seasonNumber, episodeNumber, stillPath, seriesTitle, episodeTitle }: EpisodePlayerProps) {
+export default function EpisodePlayer({ tmdbId, seasonNumber, episodeNumber, seriesTitle, episodeTitle }: EpisodePlayerProps) {
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
 
   return (
