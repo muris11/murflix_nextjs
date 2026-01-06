@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState, useRef } from "react";
+import { memo, useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 
 import { getBackdropUrl, getImageUrl } from "@/lib/image";
@@ -32,7 +32,7 @@ const GENRES: Record<number, string> = {
   10767: "Talk", 10768: "War & Politics",
 };
 
-export default function MovieCard({
+function MovieCard({
   item,
   priority = false,
   isFirst = false,
@@ -126,8 +126,9 @@ export default function MovieCard({
               src={displayImage}
               alt={title}
               fill
+              loading={priority ? undefined : "lazy"}
               priority={priority}
-              sizes="(max-width: 768px) 150px, 300px"
+              sizes="(max-width: 768px) 100px, (max-width: 1024px) 140px, 180px"
               onError={() => setImageError(true)}
               className="object-cover rounded-sm"
             />
@@ -263,3 +264,8 @@ export default function MovieCard({
     </>
   );
 }
+
+// Memoize the component to prevent unnecessary re-renders
+export default memo(MovieCard, (prevProps, nextProps) => {
+  return prevProps.item.id === nextProps.item.id;
+});
