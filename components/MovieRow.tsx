@@ -38,10 +38,10 @@ export default function MovieRow({ title, items, priority = false }: MovieRowPro
   if (!items || items.length === 0) return null;
 
   return (
-    <section className="py-0.5 md:py-1 space-y-1 group">
+    <section className="py-1 sm:py-1.5 md:py-2 space-y-1 group">
       {/* Title */}
-      <div className="px-4 sm:px-6 lg:px-8">
-        <h2 className="group/title inline-flex items-center gap-2 text-sm md:text-lg font-bold text-[#e5e5e5] hover:text-white transition-colors cursor-pointer mb-1">
+      <div className="px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16">
+        <h2 className="group/title inline-flex items-center gap-2 text-sm sm:text-base md:text-lg lg:text-xl 2xl:text-2xl font-bold text-[#e5e5e5] hover:text-white transition-colors cursor-pointer mb-1">
           <span>{title}</span>
           <div className="flex items-center opacity-0 -translate-x-2 group-hover/title:opacity-100 group-hover/title:translate-x-0 transition-all duration-300 text-[#E50914] text-[10px] md:text-xs font-bold mt-0.5 tracking-wide">
             <span className="whitespace-nowrap">Explore All</span>
@@ -71,7 +71,7 @@ export default function MovieRow({ title, items, priority = false }: MovieRowPro
         <div
           ref={rowRef}
           onScroll={handleScroll}
-          className="flex space-x-2 overflow-x-auto scrollbar-hide px-4 sm:px-6 lg:px-8 pb-4 pt-2 -mt-2 scroll-smooth"
+          className="flex space-x-2 sm:space-x-2.5 md:space-x-3 overflow-x-auto scrollbar-hide px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 pb-4 pt-2 -mt-2 scroll-smooth"
         >
           {items.map((item, index) => (
             <MovieCard 

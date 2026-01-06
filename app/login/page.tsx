@@ -54,6 +54,10 @@ export default function LoginPage() {
         setIsSubmitting(false);
         return;
       }
+
+      // Login berhasil - redirect langsung tanpa menunggu useEffect
+      // isAdmin belum ter-update di sini, jadi kita biarkan useEffect handle redirect
+      // tapi kita tidak reset isSubmitting agar loading tetap tampil sampai redirect
     } catch {
       setFormError("Terjadi kesalahan. Silakan coba lagi.");
       setIsSubmitting(false);

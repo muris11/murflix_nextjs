@@ -119,7 +119,7 @@ export default function Hero({ items }: HeroProps) {
 
   return (
     <>
-      <section className="relative h-[95vh] w-full overflow-hidden text-white bg-black group">
+      <section className="relative h-[75vh] sm:h-[80vh] md:h-[85vh] lg:h-[90vh] xl:h-[95vh] 2xl:h-[85vh] w-full overflow-hidden text-white bg-black group">
         {/* Background Image Layer */}
         <div className={`absolute inset-0 z-0 transition-opacity duration-1000 ${showBackgroundVideo ? 'opacity-0' : 'opacity-100'}`}>
           <Image
@@ -127,7 +127,7 @@ export default function Hero({ items }: HeroProps) {
             alt={title}
             fill
             priority
-            className={`object-cover transition-all duration-1000 ${
+            className={`object-cover object-top sm:object-center transition-all duration-1000 ${
               isTransitioning ? "opacity-0 scale-105" : "opacity-100 scale-100"
             }`}
             sizes="100vw"
@@ -139,70 +139,70 @@ export default function Hero({ items }: HeroProps) {
         {/* Background Video Layer */}
         {showBackgroundVideo && backgroundVideoUrl && (
           <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-             <div className="relative w-full h-[300%] -top-[100%]">
-               <iframe
-                 src={backgroundVideoUrl}
-                 className="absolute top-0 left-0 w-full h-full object-cover scale-150 opacity-60"
-                 allow="autoplay; encrypted-media"
-                 style={{ pointerEvents: isMuted ? 'none' : 'auto' }}
-               />
-             </div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <iframe
+                src={backgroundVideoUrl}
+                className="absolute w-full h-full scale-[1.5] sm:scale-[1.3] md:scale-[1.2] opacity-60"
+                allow="autoplay; encrypted-media"
+                style={{ pointerEvents: isMuted ? 'none' : 'auto' }}
+              />
+            </div>
           </div>
         )}
 
         {/* Gradient Overlays (Crucial for Netflix Look) */}
         
-        {/* Left Shadow for Text Readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-[1] w-2/3" />
+        {/* Left Shadow for Text Readability - responsive width */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-[1]" />
         
         {/* Bottom Fade to merge with content */}
-        <div className="absolute bottom-0 left-0 right-0 h-[30vh] bg-gradient-to-t from-[#141414] via-[#141414]/60 to-transparent z-[2]" />
+        <div className="absolute bottom-0 left-0 right-0 h-[50%] bg-gradient-to-t from-[#141414] via-[#141414]/80 to-transparent z-[2]" />
 
-        {/* Content Container */}
-        <div className="absolute inset-0 flex flex-col justify-end z-10 pb-20 md:pb-32 lg:pb-40">
-          <div className="w-full px-4 sm:px-12 md:px-16 lg:px-20 flex items-end justify-between">
+        {/* Content Container - improved responsive positioning */}
+        <div className="absolute inset-0 flex flex-col justify-end z-10 pb-8 sm:pb-12 md:pb-20 lg:pb-28 xl:pb-32 2xl:pb-36">
+          <div className="w-full px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24 flex items-end justify-between">
             <div
-              className={`max-w-2xl space-y-4 md:space-y-6 transition-all duration-700 delay-100 ${
+              className={`max-w-[90%] sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6 transition-all duration-700 delay-100 ${
                 isTransitioning ? "translate-y-8 opacity-0" : "translate-y-0 opacity-100"
               }`}
             >
                {/* Metadata Line */}
-               <div className="flex items-center space-x-2 md:space-x-4 text-sm md:text-base font-medium drop-shadow-md">
-                 <span className="text-[#E50914] font-black tracking-widest text-[10px] md:text-xs uppercase bg-black/10 backdrop-blur-sm px-1 md:px-2 py-0.5 md:py-1 rounded border border-[#E50914]/20">
+               <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 text-xs sm:text-sm md:text-base font-medium drop-shadow-md">
+                 <span className="text-[#E50914] font-black tracking-widest text-[9px] sm:text-[10px] md:text-xs uppercase bg-black/10 backdrop-blur-sm px-1.5 sm:px-2 py-0.5 sm:py-1 rounded border border-[#E50914]/20">
                     {mediaType === 'tv' ? 'SERIES' : 'MOVIE'}
                  </span>
                  
-                 {year && <span className="text-gray-300 font-semibold">{year}</span>}
+                 {year && <span className="text-gray-300 font-semibold text-xs sm:text-sm md:text-base">{year}</span>}
                  
-                 <span className={`font-bold ${matchScore >= 70 ? 'text-[#46d369]' : 'text-yellow-400'}`}>
+                 <span className={`font-bold text-xs sm:text-sm md:text-base ${matchScore >= 70 ? 'text-[#46d369]' : 'text-yellow-400'}`}>
                     {matchScore}% Match
                  </span>
 
-                 <span className="border border-white/40 px-1.5 md:px-2 py-0.5 text-[10px] md:text-xs rounded text-gray-200">
+                 <span className="border border-white/40 px-1 sm:px-1.5 md:px-2 py-0.5 text-[9px] sm:text-[10px] md:text-xs rounded text-gray-200">
                    {itemRating}
                  </span>
-                 <span className="border border-white/40 px-1.5 md:px-2 py-0.5 text-[10px] md:text-xs rounded text-gray-200">
+                 <span className="border border-white/40 px-1 sm:px-1.5 md:px-2 py-0.5 text-[9px] sm:text-[10px] md:text-xs rounded text-gray-200">
                    HD
                  </span>
                </div>
 
-              {/* Huge Title */}
-              <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black leading-none tracking-tight drop-shadow-2xl text-white">
+              {/* Huge Title - fully responsive */}
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-black leading-tight sm:leading-none tracking-tight drop-shadow-2xl text-white">
                 {title}
               </h1>
 
-              {/* Overview - Clamped but legible */}
-              <p className="text-sm sm:text-base md:text-lg text-white/90 drop-shadow-md line-clamp-3 font-medium max-w-xl leading-relaxed hidden sm:block">
+              {/* Overview - Clamped but legible, show on all screens */}
+              <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white/90 drop-shadow-md line-clamp-2 sm:line-clamp-3 font-medium max-w-full sm:max-w-lg md:max-w-xl lg:max-w-2xl leading-relaxed">
                 {overview}
               </p>
 
-              {/* Action Buttons */}
-              <div className="flex items-center space-x-3 md:space-x-4 pt-2 md:pt-4">
+              {/* Action Buttons - responsive sizing */}
+              <div className="flex items-center gap-2 sm:gap-3 md:gap-4 pt-1 sm:pt-2 md:pt-4">
                 <button
                   onClick={handlePlay}
-                  className="flex items-center bg-white text-black px-4 md:px-6 py-1.5 md:py-2 rounded-[4px] font-bold text-sm md:text-base hover:bg-white/80 transition-colors transform active:scale-95 duration-200"
+                  className="flex items-center bg-white text-black px-3 sm:px-4 md:px-5 lg:px-6 py-1.5 sm:py-2 md:py-2.5 rounded-[4px] font-bold text-xs sm:text-sm md:text-base hover:bg-white/80 transition-colors transform active:scale-95 duration-200"
                 >
-                  <svg className="w-5 h-5 md:w-6 md:h-6 mr-2 fill-black" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mr-1.5 sm:mr-2 fill-black" viewBox="0 0 24 24">
                     <path d="M5 3l14 9-14 9V3z" />
                   </svg>
                   Play
@@ -210,10 +210,10 @@ export default function Hero({ items }: HeroProps) {
 
                 <Link
                   href={`/${mediaType}/${currentItem.id}`}
-                  className="flex items-center bg-[rgba(109,109,110,0.7)] text-white px-4 md:px-6 py-1.5 md:py-2 rounded-[4px] font-bold text-sm md:text-base backdrop-blur-sm hover:bg-[rgba(109,109,110,0.4)] transition-colors"
+                  className="flex items-center bg-[rgba(109,109,110,0.7)] text-white px-3 sm:px-4 md:px-5 lg:px-6 py-1.5 sm:py-2 md:py-2.5 rounded-[4px] font-bold text-xs sm:text-sm md:text-base backdrop-blur-sm hover:bg-[rgba(109,109,110,0.4)] transition-colors"
                 >
                   <svg
-                    className="w-5 h-5 md:w-6 md:h-6 mr-2"
+                    className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mr-1.5 sm:mr-2"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -234,7 +234,7 @@ export default function Hero({ items }: HeroProps) {
               <div className="hidden md:flex items-center space-x-3 mb-6 mr-4 z-20">
                  <button 
                    onClick={() => setIsMuted(!isMuted)}
-                   className="p-2.5 rounded-full border border-white/50 hover:border-white bg-black/30 hover:bg-white/10 backdrop-blur-sm transition-all text-white"
+                   className="p-2 lg:p-2.5 rounded-full border border-white/50 hover:border-white bg-black/30 hover:bg-white/10 backdrop-blur-sm transition-all text-white"
                    aria-label={isMuted ? "Unmute" : "Mute"}
                  >
                    <Icon name={isMuted ? "volume-mute" : "volume"} size={20} />

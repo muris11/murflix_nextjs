@@ -40,12 +40,12 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div className="min-h-screen bg-[#141414] pb-12">
+    <div className="min-h-screen bg-[#141414] pb-8 sm:pb-10 md:pb-12">
       {/* Hero Section */}
       <Hero items={trendingData.results} />
 
       {/* Content Container - pulled up over Hero */}
-      <div className="relative z-20 -mt-10 md:-mt-16 lg:-mt-20 space-y-2 md:space-y-4 lg:space-y-6 pl-4 md:pl-8 lg:pl-12 overflow-x-hidden">
+      <div className="relative z-20 -mt-4 sm:-mt-6 md:-mt-10 lg:-mt-14 xl:-mt-16 2xl:-mt-20 space-y-1 sm:space-y-2 md:space-y-3 lg:space-y-4 overflow-x-hidden">
         
         {/* Main Trending Row (Priority) */}
         <MovieRow

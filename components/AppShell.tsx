@@ -2,7 +2,6 @@
 
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
-import MobileNav from '@/components/MobileNav';
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 
@@ -29,9 +28,8 @@ export default function AppShell({ children }: { children: ReactNode }) {
   return (
     <>
       {!shouldHideNavAndFooter && <Navbar />}
-      <main className={!shouldHideNavAndFooter ? "pb-16 md:pb-0" : ""}>{children}</main>
+      <main>{children}</main>
       {!shouldHideNavAndFooter && <Footer />}
-      {!shouldHideNavAndFooter && <MobileNav />}
     </>
   );
 }

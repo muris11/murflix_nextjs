@@ -111,7 +111,7 @@ export default function MovieCard({
       <div 
         ref={cardRef}
         className={`relative flex-shrink-0 z-10 transition-transform duration-300 ${
-          fullWidth ? "w-full" : "w-20 sm:w-24 md:w-28 lg:w-32 xl:w-40"
+          fullWidth ? "w-full" : "w-[100px] sm:w-[120px] md:w-[140px] lg:w-[160px] xl:w-[180px] 2xl:w-[200px]"
         }`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
