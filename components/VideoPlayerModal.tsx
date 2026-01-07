@@ -19,7 +19,8 @@ interface VideoPlayerModalProps {
 const SERVERS = [
   { 
     id: 'vidlink', 
-    name: 'Server 1 (Multi-Sub)', 
+    name: 'VidLink', 
+    description: 'Multi-Subtitle, HD',
     type: 'iframe',
     getUrl: (id: number, type: string, s?: number, e?: number) => 
       type === 'movie' 
@@ -27,8 +28,19 @@ const SERVERS = [
         : `https://vidlink.pro/tv/${id}/${s}/${e}` 
   },
   { 
+    id: 'vidsrccc', 
+    name: 'VidSrc CC', 
+    description: 'Multi-Sub, 1080p',
+    type: 'iframe',
+    getUrl: (id: number, type: string, s?: number, e?: number) => 
+      type === 'movie' 
+        ? `https://vidsrc.cc/v2/embed/movie/${id}` 
+        : `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`
+  },
+  { 
     id: 'embedsu', 
-    name: 'Server 2 (Fast)', 
+    name: 'Embed.su', 
+    description: 'Fast, HD',
     type: 'iframe',
     getUrl: (id: number, type: string, s?: number, e?: number) => 
       type === 'movie' 
@@ -36,22 +48,54 @@ const SERVERS = [
         : `https://embed.su/embed/tv/${id}/${s}/${e}`
   },
   { 
-    id: 'vidsrc', 
-    name: 'Server 3 (Backup)', 
+    id: '2embed', 
+    name: '2Embed', 
+    description: 'Multi-Sub, Anime',
     type: 'iframe',
     getUrl: (id: number, type: string, s?: number, e?: number) => 
       type === 'movie' 
-        ? `https://vidsrc.xyz/embed/movie/${id}` 
-        : `https://vidsrc.xyz/embed/tv/${id}/${s}/${e}`
+        ? `https://www.2embed.cc/embed/${id}` 
+        : `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`
+  },
+  { 
+    id: 'moviesapi', 
+    name: 'MoviesAPI', 
+    description: 'Multi-Sub, 1080p',
+    type: 'iframe',
+    getUrl: (id: number, type: string, s?: number, e?: number) => 
+      type === 'movie' 
+        ? `https://moviesapi.club/movie/${id}` 
+        : `https://moviesapi.club/tv/${id}/${s}/${e}`
+  },
+  { 
+    id: 'vidsrcto', 
+    name: 'VidSrc.to', 
+    description: 'HD, Fast',
+    type: 'iframe',
+    getUrl: (id: number, type: string, s?: number, e?: number) => 
+      type === 'movie' 
+        ? `https://vidsrc.to/embed/movie/${id}` 
+        : `https://vidsrc.to/embed/tv/${id}/${s}/${e}`
   },
   { 
     id: 'autoembed', 
-    name: 'Server 4 (Alt)', 
+    name: 'AutoEmbed', 
+    description: 'Backup',
     type: 'iframe',
     getUrl: (id: number, type: string, s?: number, e?: number) => 
       type === 'movie' 
         ? `https://autoembed.co/movie/tmdb/${id}` 
         : `https://autoembed.co/tv/tmdb/${id}-${s}-${e}`
+  },
+  { 
+    id: 'vembed', 
+    name: 'VEmbed', 
+    description: 'HD, 4K',
+    type: 'iframe',
+    getUrl: (id: number, type: string, s?: number, e?: number) => 
+      type === 'movie' 
+        ? `https://vembed.net/embed?tmdb=${id}` 
+        : `https://vembed.net/embed?tmdb=${id}&season=${s}&episode=${e}`
   }
 ];
 
@@ -69,6 +113,7 @@ export default function VideoPlayerModal({
   const [isLoading, setIsLoading] = useState(true);
   const [currentServer, setCurrentServer] = useState(SERVERS[0].id);
   const [showControls, setShowControls] = useState(true);
+  const [showServerPanel, setShowServerPanel] = useState(true);
 
   // Auto-hide controls timer
   useEffect(() => {
@@ -143,15 +188,15 @@ export default function VideoPlayerModal({
     >
       {/* Header Overlay (Title & Close) */}
       <div 
-        className={`absolute top-0 left-0 right-0 z-[10001] bg-gradient-to-b from-black/90 to-transparent p-6 flex justify-between items-center transition-opacity duration-300 ${
-          showControls ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        className={`absolute top-0 left-0 right-0 z-[10001] pointer-events-none p-6 flex justify-between items-center transition-opacity duration-300 ${
+          showControls ? 'opacity-100' : 'opacity-0'
         }`}
       >
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-6 pointer-events-auto">
           {/* Back Button */}
           <button
             onClick={handleClose}
-            className="group flex items-center justify-center p-2 rounded-full hover:bg-white/10 transition-all active:scale-95"
+            className="group flex items-center justify-center p-2 rounded-full bg-black/50 hover:bg-white/10 transition-all active:scale-95"
             aria-label="Back"
           >
             <svg className="w-10 h-10 text-white fill-current transition-transform duration-300 group-hover:-translate-x-1" viewBox="0 0 24 24">
@@ -160,14 +205,14 @@ export default function VideoPlayerModal({
           </button>
 
           {/* Title Area */}
-          <div className="text-white drop-shadow-md">
+          <div className="text-white drop-shadow-md bg-black/50 px-4 py-2 rounded-lg">
              {title && <h2 className="text-xl md:text-2xl font-bold tracking-wide">{title}</h2>}
              {subTitle && <p className="text-gray-400 font-medium text-base md:text-lg">{subTitle}</p>}
           </div>
         </div>
 
         {/* Right Side Controls Placeholder (Flag/Report could go here) */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 pointer-events-auto">
            {/* Add placeholders or icons here if needed */}
         </div>
       </div>
@@ -197,30 +242,74 @@ export default function VideoPlayerModal({
       {/* Footer / Server Selector Dock */}
       {!isTrailer && (
         <div 
-          className={`absolute bottom-0 left-0 right-0 z-[10001] bg-gradient-to-t from-black/90 via-black/50 to-transparent p-8 flex justify-center transition-opacity duration-300 ${
-            showControls ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          className={`absolute bottom-0 left-0 right-0 z-[10001] flex flex-col items-center pointer-events-none transition-opacity duration-300 ${
+            showControls ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <div className="bg-black/60 backdrop-blur-md border border-white/10 rounded-full p-1.5 flex space-x-1 shadow-2xl pointer-events-auto overflow-x-auto max-w-full no-scrollbar">
-            {SERVERS.map((srv) => (
-              <button
-                key={srv.id}
-                onClick={() => {
-                  if (currentServer !== srv.id) {
-                    setIsLoading(true);
-                    setCurrentServer(srv.id);
-                  }
-                }}
-                className={`px-4 py-2 text-sm font-semibold rounded-full whitespace-nowrap transition-all duration-200 ${
-                  currentServer === srv.id
-                    ? "bg-[#E50914] text-white shadow-lg scale-105"
-                    : "text-gray-400 hover:text-white hover:bg-white/10"
-                }`}
-              >
-                {srv.name}
-              </button>
-            ))}
-          </div>
+          {/* Toggle Button - Always visible when controls shown */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowServerPanel(!showServerPanel);
+            }}
+            className="mb-2 px-3 py-1.5 md:px-4 md:py-2 bg-black/70 backdrop-blur-md border border-white/10 rounded-full text-white/80 hover:text-white hover:bg-black/80 transition-all duration-200 pointer-events-auto flex items-center gap-1.5 md:gap-2 text-xs md:text-sm font-medium shadow-lg"
+          >
+            <svg 
+              className={`w-3 h-3 md:w-4 md:h-4 transition-transform duration-300 ${showServerPanel ? 'rotate-180' : ''}`} 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+            {showServerPanel ? 'Hide' : 'Servers'}
+          </button>
+
+          {/* Server Panel */}
+          {showServerPanel && (
+            <div className="px-2 pb-2 md:p-4 flex justify-center pointer-events-none w-full">
+              <div className="bg-black/80 backdrop-blur-md border border-white/10 rounded-xl md:rounded-2xl p-2 shadow-2xl pointer-events-auto w-full max-w-[98vw] md:max-w-[95vw] md:w-auto relative">
+                {/* Close button on panel */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowServerPanel(false);
+                  }}
+                  className="absolute -top-1.5 -right-1.5 md:-top-2 md:-right-2 w-5 h-5 md:w-6 md:h-6 bg-white/10 hover:bg-[#E50914] rounded-full flex items-center justify-center transition-colors duration-200"
+                  aria-label="Close server panel"
+                >
+                  <svg className="w-2.5 h-2.5 md:w-3 md:h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+                
+                {/* Mobile: Grid layout, Desktop: Flex row */}
+                <div className="grid grid-cols-4 gap-1.5 md:flex md:flex-row md:gap-2 md:overflow-x-auto md:no-scrollbar">
+                  {SERVERS.map((srv) => (
+                    <button
+                      key={srv.id}
+                      onClick={() => {
+                        if (currentServer !== srv.id) {
+                          setIsLoading(true);
+                          setCurrentServer(srv.id);
+                        }
+                      }}
+                      className={`flex flex-col items-center justify-center px-1.5 py-1.5 md:px-4 md:py-2.5 rounded-lg md:rounded-xl whitespace-nowrap transition-all duration-200 md:min-w-[90px] ${
+                        currentServer === srv.id
+                          ? "bg-[#E50914] text-white shadow-lg"
+                          : "text-gray-400 hover:text-white hover:bg-white/10 border border-white/5 md:border-transparent md:hover:border-white/20"
+                      }`}
+                    >
+                      <span className="text-[10px] md:text-sm font-semibold leading-tight">{srv.name}</span>
+                      <span className={`text-[8px] md:text-xs mt-0.5 leading-tight hidden md:block ${currentServer === srv.id ? 'text-white/80' : 'text-gray-500'}`}>
+                        {srv.description}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>,
