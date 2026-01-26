@@ -2,7 +2,8 @@ import { dramabox } from "@/lib/sansekai";
 import MediaRow from "@/components/media/MediaRow";
 import DramaCard from "@/components/media/DramaCard";
 
-export const revalidate = 3600; // Revalidate every hour
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function DramaBoxPage() {
   const [trending, latest, forYou, vip] = await Promise.all([

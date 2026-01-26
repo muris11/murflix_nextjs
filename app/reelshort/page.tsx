@@ -2,7 +2,8 @@ import { reelshort } from "@/lib/sansekai";
 import MediaRow from "@/components/media/MediaRow";
 import DramaCard from "@/components/media/DramaCard";
 
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function ReelShortPage() {
   const homepage = await reelshort.getHomepage();

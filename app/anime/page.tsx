@@ -2,7 +2,8 @@ import { anime } from "@/lib/sansekai";
 import MediaRow from "@/components/media/MediaRow";
 import AnimeCard from "@/components/media/AnimeCard";
 
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function AnimePage() {
   const [latest, recommended, movie] = await Promise.all([
