@@ -139,17 +139,29 @@ export default function Navbar() {
       })),
       searchable: true,
     },
-    {
-      label: "Browse",
-      items: [
-        { label: "All Movies", href: "/browse/movies" },
-        { label: "All TV Shows", href: "/browse/tv" },
-        { label: "New & Popular", href: "/browse/new" },
-      ],
-      searchable: false,
-    },
-    {
-      label: "Country",
+      {
+        label: "Browse",
+        items: [
+          { label: "All Movies", href: "/browse/movies" },
+          { label: "All TV Shows", href: "/browse/tv" },
+          { label: "New & Popular", href: "/browse/new" },
+        ],
+        searchable: false,
+      },
+      {
+        label: "Providers",
+        items: [
+          { label: "DramaBox", href: "/dramabox" },
+          { label: "ReelShort", href: "/reelshort" },
+          { label: "Anime", href: "/anime" },
+          { label: "Komik", href: "/komik" }, // We haven't created this page yet, but it's in the plan
+          { label: "MovieBox", href: "/moviebox" }, // Placeholder
+        ],
+        searchable: false,
+      },
+      {
+        label: "Country",
+
       items: countries.map((c) => ({
         label: c.english_name,
         href: `/browse/country/${c.iso_3166_1}`,

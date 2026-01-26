@@ -18,6 +18,21 @@ const nextConfig: NextConfig = {
         hostname: 'assets.nflxext.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: '**.sansekai.my.id',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.douyinpic.com', // Common for Chinese dramas
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.tik-cdn.com', // Common for TikTok/ReelShort content
+        pathname: '/**',
+      },
     ],
   },
 };
